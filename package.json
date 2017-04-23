@@ -2,7 +2,7 @@
   "name": "classrpg",
   "version": "1.0.0",
   "description": "Class RPG project for WebDev class.",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
@@ -22,7 +22,13 @@
   "homepage": "https://github.com/saphraxaeris/classRPG#readme",
   "dependencies": {
     "body-parser": "^1.17.1",
+    "connect-ensure-login": "^0.1.1",
+    "cookie-parser": "^1.4.3",
+    "cookie-session": "^2.0.0-beta.1",
     "express": "^4.15.2",
-    "mongodb": "^2.2.26"
+    "mongodb": "^2.2.26",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "shortid": "^2.2.8"
   }
 }
