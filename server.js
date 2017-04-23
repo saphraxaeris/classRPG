@@ -47,10 +47,9 @@ passport.deserializeUser(function(id, cb) {
 
 
 
-
 var app = express();
 app.use(bodyParser.json());
-app.use(express.static('view'));
+//app.use(express.static('view'));
 app.use(express.static('assets'));
 app.use(express.static('styles'));
 app.use(express.static('scripts'));
@@ -63,5 +62,14 @@ app.post('/user/login',passport.authenticate('local'),user.login);
 app.get('/user/login',user.getLogin);
 app.get('/',home.getHome);
 //app.post('/user/register',user.register);
+
+app.get('/test', function(req,res){
+    res.sendFile(path.join(__dirname + '/view/home/index.html'));
+});
+
+app.get('/test2', function(req,res){
+    res.sendFile(path.join(__dirname + '/view/user/login.html'));
+});
+
 
 app.listen(8080);
