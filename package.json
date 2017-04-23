@@ -1,19 +1,18 @@
 {
-  "name": "claarpg",
+  "name": "classrpg",
   "version": "1.0.0",
   "description": "Class RPG project for WebDev class.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run lite",
-    "lite": "lite-server"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/saphraxaeris/classRPG.git"
   },
   "keywords": [
-    "RPG"
+    "RPG",
+    "class"
   ],
   "author": "Jose and Stephan",
   "license": "ISC",

@@ -1,0 +1,41 @@
+.brand-logo {
+	margin-left: 15px;
+}
+
+#sidenav-overlay {
+	z-index: 1 !important;
+}
+
+.side-nav {
+	width: 250px;
+}
+
+.side-nav li > a.btn {
+	color: #000;
+    background-color: #fff;
+    font-size: .9rem;
+    margin: 15px 0;
+    box-shadow: none;
+}
+
+.profile-pic {
+	height:100%;
+	width:auto;
+	padding: 5px;
+	max-height: 65px;
+}
+
+.card-header {
+	font-size: .9rem;
+	max-height: 50px;
+	border-bottom: 1px solid #eee;
+}
+
+.thumbnail {
+	height: 50px;
+    width: 50px;
+}
+
+.profile-thumbnail-large {
+	max-height: 100px;
+}

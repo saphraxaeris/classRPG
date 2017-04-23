@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>classRPG</title>
+
+  <!-- META/CSS Start -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--<link rel="stylesheet" type="text/css" href="profile.css">-->
+  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.min.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="main.css"  media="screen,projection"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- META/CSS End -->
+</head>
+
+<body>
+
+<header>
+		<nav class="top-nav teal z-depth-3" style="position:fixed;z-index:3;">
+		<a href='#' class="brand-logo">
+			<img style="height:auto;max-width:150px;margin-top:15px;" src="http://safootballer.com.au/wp-content/uploads/2014/08/your-logo-ehre.png" />
+				</a>
+			<div class="nav-wrapper hide-on-large-only">
+                <a href="#" data-activates="nav-mobile" class="button-collapse top-nav"><i class="material-icons">menu</i></a>
+            </div>
+			<div class="nav-wrapper hide-on-med-and-down">
+					<div class="right">
+						<ul class="right">
+                			<li><a href='#'>Log In</a></li>
+                			<li><a href='#'>Sign Up</a></li>
+           	 			</ul>
+					</div>
+
+				<form style="margin-right: 20%; margin-left: 20%;">
+        			<div class="input-field">
+          				<input id="search" type="search" placeholder="Search...">
+         				<label class="label-icon" for="search"><i class="material-icons">search</i></label>
+          				<i class="material-icons">close</i>
+        			</div>
+      			</form>
+			</div>
+
+			<ul id="nav-mobile" class="side-nav">
+				<li><a href='#' class="home btn"><i class="fa fa-home"></i>Home</a></li>
+        		<li><a href='#' class="volunteers btn"><i class="fa fa-users"></i>Volunteers</a></li>
+        		<li><a href='#' class="communities btn"><i class="fa fa-handshake-o"></i>Communities</a></li>
+				<li><a href='#' class="profile btn"><i class="fa fa-user"></i>Profile</a></li>
+				<li><a href='#' class="events btn"><i class="fa fa-calendar"></i>Events</a></li>
+			</ul>
+        </nav>
+	</header>
+
+<div class="col l10 m12 s12" style="margin-top: 70px;">
+			<div class="container">
+				<h1>Hi!</h1>
+			</div>
+		</div>
+
+<!-- Scripts Start -->
+<script type="text/javascript" src="materialize/js/materialize.min.js"></script>
+<script src="jquery.min.js"></script>
+<script src="navigation.js"></script>
+<script>
+  var siteUrl = "localhost:3000";
+
+  $(function() {
+    //Profile.Initialize();
+  });
+
+</script>
+<!-- Scripts End -->
+
+</body>
+
+</html>
