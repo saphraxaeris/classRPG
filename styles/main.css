@@ -1,5 +1,24 @@
+.container {
+	padding-top: 85px;
+	width: 100%;
+    padding-left: 275px;
+    padding-right: 25px;
+	padding-bottom: 25px;
+}
+
 .brand-logo {
 	margin-left: 15px;
+}
+
+a.brand-logo > img {
+    height:auto;
+    max-height:50px;
+    margin-top:7px;
+}
+
+.top-nav {
+    position:fixed;
+    z-index:3;
 }
 
 #sidenav-overlay {
@@ -8,6 +27,11 @@
 
 .side-nav {
 	width: 250px;
+}
+
+.non-mobile-side-nav {
+    width: 250px;
+    transform: translate(0, 64px)!important;
 }
 
 .side-nav li > a.btn {
@@ -38,4 +62,23 @@
 
 .profile-thumbnail-large {
 	max-height: 100px;
+}
+
+.bold {
+	font-weight: 500 !important;
+}
+
+.red-bg {
+	background-color: rgba(225,4,20, .8)
+}
+
+@media only screen and (max-width: 993px) {
+    .container {
+	padding-top: 85px;
+	width: 100%;
+    padding-left: 25px;
+    padding-right: 25px;
+	padding-bottom: 25px;
+}
+
 }
