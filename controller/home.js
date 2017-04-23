@@ -2,6 +2,6 @@ var path = require('path')
 
 exports.getHome = function(req,res){
 
-    res.sendFile(path.join(__dirname+'/view/home/index.html'));
+    res.sendFile('index.html',{root:"./view/home"});
 
 }
