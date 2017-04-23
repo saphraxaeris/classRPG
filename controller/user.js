@@ -8,8 +8,10 @@ exports.setVars = function(DB)
 
 exports.login = function(req,res){
     var users = db.collection('users');
+    console.log(req.body);
     users.findOne({username:req.body.username}).then(function(user) {
         user.key = shortid.generate();
+        console.log(user);
         users.update({_id:user._id},user,function(err, results) {
             if (err) {
                 res.send({'error':'An error has occurred - ' + err});
@@ -21,7 +23,7 @@ exports.login = function(req,res){
       });
    };
 
-exports.regiser = function (req,res){
+exports.register = function (req,res){
 var users = db.collection('users');
 users.findOne({username:req.body.username}).then(function(user) {
     user.key = shortid.generate();
@@ -36,7 +38,6 @@ users.findOne({username:req.body.username}).then(function(user) {
     });
 };
 
-exports.getLogin(req,res)
-{
-    res.sendFile(path.join(__dirname+'/view/user/login.html'));
+exports.getLogin = function(req,res){
+    res.sendFile('login.html',{root:"./view/user"});
 }
