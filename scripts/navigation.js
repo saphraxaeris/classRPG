@@ -11,7 +11,8 @@ var Navigation = function() {
 		$('#login-btn').on('click', function(e){
 			e.preventDefault();
 
-			var data = { usernaame: $('#username').val(), password: $('#password').val()};
+			var data = { username: $('#username').val(), password: $('#password').val()};
+            console.log(data);
 			$.ajax({
             type: "POST",
             url: siteUrl + "user/login",

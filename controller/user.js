@@ -1,4 +1,5 @@
 var path = require('path');
+var shortid = require('shortid');
 
 db = {};
 exports.setVars = function(DB)
@@ -10,6 +11,7 @@ exports.login = function(req,res){
     var users = db.collection('users');
     console.log(req.body);
     users.findOne({username:req.body.username}).then(function(user) {
+        console.log(shortid.generate());
         user.key = shortid.generate();
         console.log(user);
         users.update({_id:user._id},user,function(err, results) {

@@ -5,7 +5,6 @@ var bodyParser = require('body-parser');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
 var mongo = require('mongodb');
-var shortid = require('shortid');
 
 var Server = mongo.Server,
     Db = mongo.Db,
@@ -33,7 +32,7 @@ passport.use(new Strategy(
   }));
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
+  cb(null, user._id);
 });
 
 passport.deserializeUser(function(id, cb) {
