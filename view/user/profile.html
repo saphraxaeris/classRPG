@@ -17,42 +17,51 @@
 
 <header>
 		<nav class="top-nav teal z-depth-3">
-		<a href='#' class="brand-logo">
-			<!--<img src="http://www.roxboroughliving.com/wp-content/uploads/2016/03/logo-placeholder.jpg" />-->
+			<a href='#' class="brand-logo">
+				<!--<img src="http://www.roxboroughliving.com/wp-content/uploads/2016/03/logo-placeholder.jpg" />-->
 				<span class='rpg'>class</span>
-				</a>
+			</a>
 			<section class="nav-wrapper hide-on-large-only">
                 <a href="#" data-activates="nav-mobile" class="button-collapse top-nav"><i class="material-icons">menu</i></a>
             </section>
 			<section class="nav-wrapper hide-on-med-and-down">
 					<aside class="right">
-						<ul class="user-info right">
-                			<li><a href='/user/login'>Login</a></li>
-                			<li><a href='/user/register'>Register</a></li>
+                        <ul class="user-info right">
+
            	 			</ul>
 					</diasidev>
 			</section>
 			<ul id="nav-mobile" class="side-nav">
                 <li class="user-info">
-                    <a href='/user/login' class="btn">Login</a>
-                    <a href='/user/register' class="btn">Register</a>
+
                 </li>
+				<li><a href='/' class="home btn"><i class="fa fa-home"></i>Home</a></li>
+        		<li class="active"><a href='/user/profile' class="profile btn"><i class="fa fa-user"></i>Profile</a></li>
+				<li><a href='/user/inventory' class="inventory btn"><i class="fa fa-briefcase"></i>Inventory</a></li>
+				<li><a href='/classes/classes' class="classes btn"><i class="fa fa-graduation-cap"></i>Classes</a></li>
 			</ul>
         </nav>
 	</header>
+
+	<ul class="side-nav non-mobile-side-nav hide-on-med-and-down">
+		<li><a href='/' class="home btn"><i class="fa fa-home"></i>Home</a></li>
+		<li class="active"><a href='/user/profile' class="profile btn"><i class="fa fa-user"></i>Profile</a></li>
+		<li><a href='/user/inventory' class="inventory btn"><i class="fa fa-briefcase"></i>Inventory</a></li>
+		<li><a href='/classes/classes' class="classes btn"><i class="fa fa-graduation-cap"></i>Classes</a></li>
+	</ul>
 
 <div class="overlay" style="display: none;">
     <div class="overlay-content">
         <div class="loader"></div>
     </div>
 </div>
-<main class="container">
+<div class="container">
     <div class="row">
-		<div class="col push-l2 push-m2 push-s1 l8 m8 s10">
+		<div class="col l12 m12 s12">
 			<section class="card grey lighten-3 z-depth-4">
 				<div class="card-content">
-					<span class="card-title bold">Register</span>
-					<form id="register-form">
+					<span class="card-title bold">Profile</span>
+					<form id="profile-form">
 						<div class="row">
         					<div class="input-field col s12">
           						<input id="username" type="text" class="validate">
@@ -80,12 +89,12 @@
 						<div class="row">
         					<div class="input-field col s12">
           						<input id="password" type="password" class="validate">
-          						<label for="password">Password</label>
+          						<label for="password">New Password</label>
         					</div>
       					</div>
 						<div class="row">
         					<div class="input-field col s12">
-								<button id="register-btn" class="btn right">Register</button>
+								<button id="profile-btn" class="btn right">Change Password</button>
         					</div>
       					</div>
 					</form>
@@ -93,7 +102,7 @@
 			</section>
 		</div>
 	</div>
-</main>
+</div>
 
 <!-- Scripts Start -->
 <script src="../jquery.min.js"></script>
@@ -101,13 +110,12 @@
 <script src="../navigation.js"></script>
 <script src="../cookie.js"></script>
 <script>
-  if(Navigation.VerifyLogin())
-  {
-	  Navigation.GoToHome();
-  }
+	Navigation.ForceLogin();	
+  	Navigation.VerifyLogin();
   $(function() {
     $(".button-collapse").sideNav();
-	Navigation.InitRegister();
+    Navigation.VerifyError();
+    Navigation.InitProfile();
   });
 
 </script>

@@ -18,7 +18,8 @@
 <header>
 		<nav class="top-nav teal z-depth-3">
 		<a href='#' class="brand-logo">
-			<img src="http://www.roxboroughliving.com/wp-content/uploads/2016/03/logo-placeholder.jpg" />
+			<!--<img src="http://www.roxboroughliving.com/wp-content/uploads/2016/03/logo-placeholder.jpg" />-->
+				<span class='rpg'>class</span>
 				</a>
 			<section class="nav-wrapper hide-on-large-only">
                 <a href="#" data-activates="nav-mobile" class="button-collapse top-nav"><i class="material-icons">menu</i></a>
@@ -36,25 +37,15 @@
                     <a href='/user/login' class="btn">Login</a>
                     <a href='/user/register' class="btn">Register</a>
                 </li>
-				<li><a href='#' class="home btn"><i class="fa fa-home"></i>Home</a></li>
-        		<li><a href='#' class="volunteers btn"><i class="fa fa-users"></i>Volunteers</a></li>
-        		<li><a href='#' class="communities btn"><i class="fa fa-handshake-o"></i>Communities</a></li>
-				<li><a href='#' class="profile btn"><i class="fa fa-user"></i>Profile</a></li>
-				<li><a href='#' class="events btn"><i class="fa fa-calendar"></i>Events</a></li>
 			</ul>
         </nav>
 	</header>
 
-
-<ul class="side-nav non-mobile-side-nav hide-on-med-and-down">
-				<li><a href='#' class="home btn"><i class="fa fa-home"></i>Home</a></li>
-        		<li><a href='#' class="volunteers btn"><i class="fa fa-users"></i>Volunteers</a></li>
-        		<li><a href='#' class="communities btn"><i class="fa fa-handshake-o"></i>Communities</a></li>
-				<li><a href='#' class="profile btn"><i class="fa fa-user"></i>Profile</a></li>
-				<li><a href='#' class="events btn"><i class="fa fa-calendar"></i>Events</a></li>
-			</ul>
-
-
+<div class="overlay" style="display: none;">
+    <div class="overlay-content">
+        <div class="loader"></div>
+    </div>
+</div>
 <main class="container">
     <div class="row">
 		<div class="col push-l2 push-m2 push-s1 l8 m8 s10">
@@ -92,7 +83,10 @@
 <script src="../navigation.js"></script>
 <script src="../cookie.js"></script>
 <script>
-  Navigation.VerifyLogin();
+  if(Navigation.VerifyLogin())
+  {
+	  Navigation.GoToHome();
+  }
   $(function() {
     $(".button-collapse").sideNav();
 	Navigation.InitLogin();

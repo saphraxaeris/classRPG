@@ -6,9 +6,9 @@
   <!-- META/CSS Start -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--<link rel="stylesheet" type="text/css" href="profile.css">-->
-  <link type="text/css" rel="stylesheet" href="materialize/css/materialize.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="../materialize/css/materialize.css"  media="screen,projection"/>
   <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link type="text/css" rel="stylesheet" href="main.css"  media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="../main.css"  media="screen,projection"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <!-- META/CSS End -->
 </head>
@@ -35,32 +35,45 @@
                 <li class="user-info">
 
                 </li>
-				<li class="active"><a href='/' class="home btn"><i class="fa fa-home"></i>Home</a></li>
+				<li><a href='/' class="home btn"><i class="fa fa-home"></i>Home</a></li>
         		<li><a href='/user/profile' class="profile btn"><i class="fa fa-user"></i>Profile</a></li>
 				<li><a href='/user/inventory' class="inventory btn"><i class="fa fa-briefcase"></i>Inventory</a></li>
-				<li><a href='/classes/classes' class="classes btn"><i class="fa fa-graduation-cap"></i>Classes</a></li>
+				<li class="active"><a href='/classes/classes' class="classes btn"><i class="fa fa-graduation-cap"></i>Classes</a></li>
 			</ul>
         </nav>
 	</header>
 
 	<ul class="side-nav non-mobile-side-nav hide-on-med-and-down">
-		<li class="active"><a href='/' class="home btn"><i class="fa fa-home"></i>Home</a></li>
+		<li><a href='/' class="home btn"><i class="fa fa-home"></i>Home</a></li>
 		<li><a href='/user/profile' class="profile btn"><i class="fa fa-user"></i>Profile</a></li>
 		<li><a href='/user/inventory' class="inventory btn"><i class="fa fa-briefcase"></i>Inventory</a></li>
-		<li><a href='/classes/classes' class="classes btn"><i class="fa fa-graduation-cap"></i>Classes</a></li>
+		<li class="active"><a href='/classes/classes' class="classes btn"><i class="fa fa-graduation-cap"></i>Classes</a></li>
 	</ul>
 
-
+<div class="overlay" style="display: none;">
+    <div class="overlay-content">
+        <div class="loader"></div>
+    </div>
+</div>
 <div class="container">
-	<div class="row">
+    <div class="row">
 		<div class="col l12 m12 s12">
 			<section class="card grey lighten-3 z-depth-4">
 				<div class="card-content">
-					<span class="card-title bold">Site News</span>
-					<article class="news">
-						<h1>Site has launched!</h1>
-						<img class="responsive-img" src="http://static.jeffbullas.com/wp-content/uploads/2016/07/3-Simple-Ways-to-Generate-Buzz-for-a-Launch-with-Infographics.jpg" alt="Launch">
-					</article>
+					<span class="card-title bold">Classes</span>
+                    <table class="bordered highlight">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Professor</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
 				</div>
 			</section>
 		</div>
@@ -68,17 +81,17 @@
 </div>
 
 <!-- Scripts Start -->
-<script src="jquery.min.js"></script>
-<script type="text/javascript" src="materialize/js/materialize.js"></script>
-<script src="navigation.js"></script>
-<script src="cookie.js"></script>
+<script src="../jquery.min.js"></script>
+<script type="text/javascript" src="../materialize/js/materialize.js"></script>
+<script src="../navigation.js"></script>
+<script src="../cookie.js"></script>
 <script>
-	Cookies.set('classRPG-user', {id: 'poop', username:'stephan.elias', name: 'Stephan Elias Remy', email: 'stephan.elias@upr.edu', studentId: '802-12-2205'} , {expires: 3})
 	Navigation.ForceLogin();	
   	Navigation.VerifyLogin();
   $(function() {
     $(".button-collapse").sideNav();
     Navigation.VerifyError();
+    Navigation.InitClasses();
   });
 
 </script>

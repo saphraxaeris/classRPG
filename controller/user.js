@@ -7,6 +7,11 @@ exports.setVars = function(DB)
     db = DB;
 }
 
+/* Login */
+exports.getLogin = function(req,res){
+    res.sendFile('login.html',{root:"./view/user"});
+};
+
 exports.login = function(req,res){
     var users = db.collection('users');
     console.log(req.body);
@@ -25,6 +30,11 @@ exports.login = function(req,res){
       });
    };
 
+/* Register */
+exports.getRegister = function(req,res){
+    res.sendFile('register.html',{root:"./view/user"});
+};
+
 exports.register = function (req,res){
 var users = db.collection('users');
 users.findOne({username:req.body.username}).then(function(user) {
@@ -40,6 +50,20 @@ users.findOne({username:req.body.username}).then(function(user) {
     });
 };
 
-exports.getLogin = function(req,res){
-    res.sendFile('login.html',{root:"./view/user"});
-}
+/* Profile */
+exports.getProfile = function(req,res){
+    res.sendFile('profile.html',{root:"./view/user"});
+};
+
+exports.profile = function(req,res){
+    res.send(true);
+};
+
+/* Inventory */
+exports.getInventory = function(req,res){
+    res.sendFile('inventory.html',{root:"./view/user"});
+};
+
+exports.inventory = function(req,res){
+    res.send(true);
+};

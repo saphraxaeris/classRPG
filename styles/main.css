@@ -72,6 +72,40 @@ a.brand-logo > img {
 	background-color: rgba(225,4,20, .8)
 }
 
+.green-bg {
+	background-color: rgba(95, 186, 125, .8)
+}
+
+.rpg:after {
+	font-weight: bold;
+	color: #963000;
+	content: "RPG";
+}
+
+.underline{
+	text-decoration: underline;
+}
+
+.news {
+	border-top: 1px solid #333;
+	border-bottom: 1px solid #333;
+	margin: 20px 0;
+}
+
+.news h1 {
+	font-size: 2rem;
+	margin: 10px 0;
+}
+
+.news img {
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+.side-nav li.active > a.btn {
+	background-color: #2bbbad !important;
+}
+
 @media only screen and (max-width: 993px) {
     .container {
 	padding-top: 85px;

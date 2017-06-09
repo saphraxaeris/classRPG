@@ -1,6 +1,7 @@
 var express = require('express');
 var home = require('./controller/home');
 var user = require('./controller/user');
+var classes = require('./controller/classes');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var Strategy = require('passport-local').Strategy;
@@ -56,19 +57,23 @@ app.use(express.static('scripts'));
 app.use(passport.initialize());
 app.use(passport.session());
 
-
 app.post('/user/login',passport.authenticate('local'),user.login);
 app.get('/user/login',user.getLogin);
+
+app.get('/user/register',user.getRegister);
+app.post('/user/register',user.register);
+
+app.get('/user/profile',user.getProfile);
+app.post('/user/profile', user.profile);
+
+app.get('/user/getInventory',user.getInventory);
+app.get('/user/inventory', user.inventory);
+
+app.get('/classes/getClasses',user.getClasses);
+app.get('/classes/classes', user.classes);
+app.get('/classes/class', user.class);
+
 app.get('/',home.getHome);
-//app.post('/user/register',user.register);
-
-app.get('/test', function(req,res){
-    res.sendFile(path.join(__dirname + '/view/home/index.html'));
-});
-
-app.get('/test2', function(req,res){
-    res.sendFile(path.join(__dirname + '/view/user/login.html'));
-});
 
 
 app.listen(8080);
