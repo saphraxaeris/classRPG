@@ -1,3 +1,7 @@
+# TO-DO - General
+* Professors create assignments for class
+* Students can complete assignments of a class
+
 # TO-DO - Front End
 # # Classes
 * classStudent.html
@@ -5,8 +9,6 @@
 
 # # Inventory
 * inventory.html
-
-
 
 # TO-DO - Back End
 # # Endpoints
