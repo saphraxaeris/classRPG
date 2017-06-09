@@ -11,8 +11,8 @@
 * inventory.html
 
 # TO-DO - Back End
-# # Endpoints
-# # # Register Post:
+## Endpoints
+### Register Post:
 * Register Post:
 * Send: { username: username, name: name, email: email, studentId: studentId, password: password, student: true }
 * Recieve Ok: user object without password
