@@ -6,6 +6,10 @@
 	padding-bottom: 25px;
 }
 
+.grey.lighten-3 {
+    background-color: #f9ede7 !important;
+}
+
 .brand-logo {
 	margin-left: 15px;
 }
@@ -104,15 +108,114 @@ a.brand-logo > img {
 
 .side-nav li.active > a.btn {
 	background-color: #2bbbad !important;
+	color: white;
+}
+.side-nav li.active > a.btn i {
+	color: white;
+}
+
+.side-nav li > a.btn:hover {
+	background-color: #2bbbad !important;
+	color: white;
+}
+.side-nav li > a.btn:hover i {
+	color: white;
+}
+
+.sprite {
+	width: 50%;
+	margin-left: 20%;
+}
+
+table.highlight > tbody > tr:hover {
+    background-color: #2bbbad;
+	color: white;
+}
+
+.card .card-content .card-sub-title {
+    display: block;
+    line-height: 32px;
+    margin-bottom: 8px;
+}
+
+.card .card-sub-title {
+    font-size: 18px;
+    font-weight: 300;
+}
+
+.class-professor::before {
+	content: "Professor: ";
+	font-weight: bold;
+}
+
+.class-office::before {
+	content: "Office: ";
+	font-weight: bold;
+}
+
+.class-office-hours::before {
+	content: "Office Hours: ";
+	font-weight: bold;
+}
+
+.btn-flat:focus, .btn-flat:hover {
+    background-color: rgba(0,0,0, 0) !important;
+    box-shadow: none;
+}
+
+.overlay {
+    /* Height & width depends on how you want to reveal the overlay (see JS below) */
+    height: 100%;
+    width: 100%;
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    background-color: rgb(0,0,0); /* Black fallback color */
+    background-color: rgba(0,0,0, 0.9); /* Black w/opacity */
+    overflow-x: hidden; /* Disable horizontal scroll */
+}
+
+/* Position the content inside the overlay */
+.overlay-content {
+    position: relative;
+    width: 100%; /* 100% width */
+    text-align: center; /* Centered text/links */
+    margin-top: 20%;
+	margin-left: 100px;
+}
+
+.loader {
+    border: 16px solid #ddd;
+    border-top: 16px solid #2bbbad;
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    display: table;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 @media only screen and (max-width: 993px) {
     .container {
-	padding-top: 85px;
-	width: 100%;
-    padding-left: 25px;
-    padding-right: 25px;
-	padding-bottom: 25px;
-}
+		padding-top: 85px;
+		width: 100%;
+		padding-left: 25px;
+		padding-right: 25px;
+		padding-bottom: 25px;
+	}
 
+	.overlay-content {
+		margin-left: 0px;
+	}
 }

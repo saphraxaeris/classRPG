@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>classRPG</title>
+
+  <!-- META/CSS Start -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!--<link rel="stylesheet" type="text/css" href="profile.css">-->
+  <link type="text/css" rel="stylesheet" href="../materialize/css/materialize.css"  media="screen,projection"/>
+  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="../main.css"  media="screen,projection"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- META/CSS End -->
+</head>
+
+<body>
+
+<header>
+		<nav class="top-nav teal z-depth-3">
+			<a href='#' class="brand-logo">
+				<!--<img src="http://www.roxboroughliving.com/wp-content/uploads/2016/03/logo-placeholder.jpg" />-->
+				<span class='rpg'>class</span>
+			</a>
+			<section class="nav-wrapper hide-on-large-only">
+                <a href="#" data-activates="nav-mobile" class="button-collapse top-nav"><i class="material-icons">menu</i></a>
+            </section>
+			<section class="nav-wrapper hide-on-med-and-down">
+					<aside class="right">
+                        <ul class="user-info right">
+
+           	 			</ul>
+					</diasidev>
+			</section>
+			<ul id="nav-mobile" class="side-nav">
+                <li class="user-info">
+
+                </li>
+				<li><a href='/' class="home btn"><i class="fa fa-home"></i>Home</a></li>
+        		<li><a href='/user/profile' class="profile btn"><i class="fa fa-user"></i>Profile</a></li>
+				<li><a href='/user/inventory' class="inventory btn"><i class="fa fa-briefcase"></i>Inventory</a></li>
+				<li class="active"><a href='/classes/classes' class="classes btn"><i class="fa fa-graduation-cap"></i>Classes</a></li>
+			</ul>
+        </nav>
+	</header>
+
+	<ul class="side-nav non-mobile-side-nav hide-on-med-and-down">
+		<li><a href='/' class="home btn"><i class="fa fa-home"></i>Home</a></li>
+		<li><a href='/user/profile' class="profile btn"><i class="fa fa-user"></i>Profile</a></li>
+		<li><a href='/user/inventory' class="inventory btn"><i class="fa fa-briefcase"></i>Inventory</a></li>
+		<li class="active"><a href='/classes/classes' class="classes btn"><i class="fa fa-graduation-cap"></i>Classes</a></li>
+	</ul>
+
+<div class="overlay" style="display: none;">
+    <div class="overlay-content">
+        <div class="loader"></div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+		<div class="col l12 m12 s12">
+			<section class="card grey lighten-3 z-depth-4">
+				<div class="card-content">
+					<span class="card-title bold">Class Info<button id="update-class-btn" class="btn teal right">Update Info</button></span>
+                    <form id="update-class-form">
+						<div class="row">
+        					<div class="input-field col s12">
+          						<input id="office-hours" type="text" placeholder="">
+          						<label for="office-hours">Office Hours</label>
+        					</div>
+      					</div>
+					</form>
+				</div>
+			</section>
+		</div>
+
+        <div class="col l12 m12 s12">
+			<section class="card grey lighten-3 z-depth-4">
+				<div class="card-content">
+					<span class="card-title bold">Items<button data-target="add-item-modal" class="btn teal right">Add Item</button></span>
+                    <table class="bordered highlight">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Class</th>
+                            <th>Name</th>
+                            <th>Effect</th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+				</div>
+			</section>
+		</div>
+
+        <div class="col l12 m12 s12">
+			<section class="card grey lighten-3 z-depth-4">
+				<div class="card-content">
+					<span class="card-title bold">Assignments<button data-target="add-assignment-modal" class="btn teal right">Add Assignment</button></span>
+                    
+				</div>
+			</section>
+		</div>
+	</div>
+</div>
+
+
+<!-- Add Item Modal -->
+<section id="add-item-modal" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>Add Item<button class="modal-action modal-close btn-flat right"><i class="fa fa-times"></i></button></h4>
+        <form id="update-class-form">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="item-name" type="text" placeholder="">
+                    <label for="item-name">Name</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="item-effect" type="text" placeholder="">
+                    <label for="item-effect">Effect</label>
+                </div>
+                <div class="input-field col s12">
+                    <select id="item-sprite">
+                        <option value="blue-potion.png">Blue Potion</option>
+                        <option value="red-potion.png">Red Potion</option>
+                        <option value="yellow-potion.png">Yellow Potion</option>
+                        <option value="scroll.png">Scroll</option>
+                        <option value="crystal-ball.png">Crystal Ball</option>
+                    </select>
+                    <label>Sprite</label>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button id="add-item-btn" class="modal-action waves-effect waves-green btn">Save</button>
+    </div>
+</section>
+
+<!-- Add Assignment Modal -->
+<section id="add-assignment-modal" class="modal bottom-sheet">
+    <div class="modal-content">
+        <h4>Add Assignment<button class="modal-action modal-close btn-flat right"><i class="fa fa-times"></i></button></h4>
+        <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+        <button id="add-assignment-btn" class="modal-action modal-close waves-effect waves-green btn">Save</button>
+    </div>
+</section>
+
+<!-- Scripts Start -->
+<script src="../jquery.min.js"></script>
+<script type="text/javascript" src="../materialize/js/materialize.js"></script>
+<script src="../navigation.js"></script>
+<script src="../cookie.js"></script>
+<script>
+	Navigation.ForceLogin();	
+  	Navigation.VerifyLogin();
+  $(function() {
+    $(".button-collapse").sideNav();
+    Navigation.VerifyError();
+    Navigation.InitClassProfessor();
+  });
+
+</script>
+<!-- Scripts End -->
+
+</body>
+
+</html>

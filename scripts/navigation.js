@@ -271,17 +271,150 @@ var Navigation = function() {
                 contentType: "application/json; charset=utf-8",
                 success: function(classes){
                     for(var i = 0, len = classes.length; i < len; i++) {
-                        var html = "<tr class='data-row' data-id='" + classes[i].id +"'><td>" + classes[i].name + "</td><td>" + classes[i].code + "</td><td>" + classes[i].professor + "</td></tr>";
+                        var html = "<tr class='data-row' data-id='" + classes[i].id +"'><td>" + classes[i].name + "</td><td>" + classes[i].code + "</td><td>" + classes[i].professor.name + "</td></tr>";
                         $('tbody').append(html);
                     }
                     hideLoading();
                     $('.data-row').on('click', function(){
-                        window.location = siteUrl + "classes/class?userId=" + JSON.parse(Cookies.get(cookieName).id) + "&classId=" + $(this).data('id');
+                        var user = JSON.parse(Cookies.get(cookieName));
+                        window.location = siteUrl + "classes/class?userId=" + user.id + "&classId=" + $(this).data('id');
                     });
                 },
                 error : function() {
                     hideLoading();
                     showFailedPopup('Failed to get classes.');
+                }
+            });
+        },
+        InitInventory: function() {
+            showLoading();
+            $.ajax({
+                type: "GET",
+                url: siteUrl + "user/getInventory",
+                dataType: "json",
+                data: Cookies.get(cookieName),
+                contentType: "application/json; charset=utf-8",
+                success: function(inventory){
+                    for(var i = 0, len = inventory.length; i < len; i++) {
+                        var html = "<tr><td><img class='sprite' alt='sprite' src='../images/"+ inventory[i].sprite +"'></td><td>" + inventory[i].className + "</td><td>" + inventory[i].name + "</td><td>" + inventory[i].effect + "</td></tr>";
+                        $('tbody').append(html);
+                    }
+                    hideLoading();
+                },
+                error : function() {
+                    hideLoading();
+                    showFailedPopup('Failed to get classes.');
+                }
+            });
+        },
+        InitClassStudent: function() {
+            showLoading();
+            var url = new URL(window.location.href);
+            var id = url.searchParams.get("classId");
+            $.ajax({
+                type: "GET",
+                url: siteUrl + "classes/classInfoStudent",
+                dataType: "json",
+                data: JSON.stringify({classId: id}),
+                contentType: "application/json; charset=utf-8",
+                success: function(classInfo){
+                    $('.class-name').text(classInfo.name);
+                    $('.class-professor').text(classInfo.professor.name);
+                    $('.class-office').text(classInfo.professor.office);
+                    $('.class-office-hours').text(classInfo.officeHours);
+                    hideLoading();
+                },
+                error : function() {
+                    hideLoading();
+                    showFailedPopup('Failed to get class info.');
+                }
+            });
+        },
+        InitClassProfessor: function() {
+            var url = new URL(window.location.href);
+            var id = url.searchParams.get("classId");
+
+            $('.modal').modal();
+            $('select').material_select();
+            $('#add-item-btn').on('click', function(){
+                var name = $('#item-name').val();
+                var effect = $('#item-effect').val();
+                var sprite = $('#item-sprite').find(":selected").text();
+
+                if(name.length == 0) {
+                    showFailedPopup("Name can't be empty.");
+                    return;
+                }
+                else if(!/^[A-Za-z\s]+$/.test(name)) {
+                    showFailedPopup("Name is not valid.");
+                    return;
+                }
+
+                if(effect.length == 0) {
+                    showFailedPopup("Effect can't be empty.");
+                    return;
+                }
+
+                var item = {name: name, effect: effect, sprite: sprite, classId: id};
+                $.ajax({
+                    type: "POST",
+                    url: siteUrl + "classes/addItem",
+                    dataType: "json",
+                    data: JSON.stringify(item),
+                    contentType: "application/json; charset=utf-8",
+                    success: function(classInfo){
+                        hideLoading();
+                        showSuccessPopup('Successfully added item.');
+                    },
+                    error : function() {
+                        hideLoading();
+                        showFailedPopup('Failed to add item.');
+                    }
+                });
+            });
+
+            $('#update-class-btn').on('click', function(){
+                var officeHours = $('#office-hours').val();
+                if(officeHours.length == 0) {
+                    showFailedPopup("Office hours can't be empty.");
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: siteUrl + "classes/update",
+                    dataType: "json",
+                    data: JSON.stringify({classId: id, officeHours: officeHours}),
+                    contentType: "application/json; charset=utf-8",
+                    success: function(classInfo){
+                        showSuccessPopup('Successfully updated info.');
+                        hideLoading();
+                    },
+                    error : function() {
+                        hideLoading();
+                        showFailedPopup('Failed to get class info.');
+                    }
+                });
+            });
+
+            showLoading();
+            $.ajax({
+                type: "GET",
+                url: siteUrl + "classes/classInfoProfessor",
+                dataType: "json",
+                data: JSON.stringify({classId: id}),
+                contentType: "application/json; charset=utf-8",
+                success: function(classInfo){
+                    $('#office-hours').val(classInfo.classInfo.officeHours);
+                    for(var i = 0, len = classInfo.items.length; i < len; i++) {
+                        var html = "<tr><td><img class='sprite' alt='sprite' src='../images/"+ classInfo.items[i].sprite +"'></td><td>" + classInfo.items[i].className + "</td><td>" + classInfo.items[i].name + "</td><td>" + classInfo.items[i].effect + "</td></tr>";
+                        $('tbody').append(html);
+                    }
+
+                    hideLoading();
+                },
+                error : function() {
+                    hideLoading();
+                    showFailedPopup('Failed to get class info.');
                 }
             });
         }

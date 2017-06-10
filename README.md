@@ -2,14 +2,6 @@
 * Professors create assignments for class
 * Students can complete assignments of a class
 
-# TO-DO - Front End
-## Classes
-* classStudent.html
-* classProfessor.html
-
-## Inventory
-* inventory.html
-
 # TO-DO - Back End
 ## Endpoints
 ### Register Post:
@@ -48,7 +40,28 @@
 ### GET: /classes/class?userId=[id]&classId=[id]
 * Return: If userId belongs to student classStudent.html, else classProfessor.html
 
+### Get: /classes/classInfoStudent
+* Send: { classId: classId }
+* Recieve Ok: Class object
+* Recieve error: string message with error to show to user
+
+### Get: /classes/classInfoProfessor
+* Send: { classId: classId }
+* Recieve Ok: { classInfo: [class object], items: [ Item[] of items associated to class ] }
+* Recieve error: string message with error to show to user
+
+### POST: /classes/update
+* Send: { classId: classId, officeHours: officeHours }
+* Recieve Ok: [nothing extra needed]
+* Recieve error: [nothing extra needed]
+
+### POST: /classes/addItem
+* Send: (classId: classId, name: itemName, effect: itemEffect, sprite: sprite)
+* Recieve Ok: [nothing extra needed]
+* Recieve error: [nothing extra needed]
+
 ## Objects:
-* User: { [something] id, string username, string name string email, string studentId, string password, bool student, string officeHours, string office, int gold }
-* Class: { [something] id, string name, User professor, string department, string code }
-* Item: { [something] id, string name, string effect }Send: { username: username, name: name, email: email, studentId: studentId, password: password, student: true }
+* User: { [something] id, string username, string name string email, string studentId, string password, bool student, string office, int gold }
+* Class: { [something] id, string name, User professor, string department, string code, string officeHours }
+* Announcements: { [something] id, [something] classId, string title, string description }
+* Item: { [something] id, [something] classId, string className, string name, string effect, string sprite }

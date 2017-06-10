@@ -65,5 +65,5 @@ exports.getInventory = function(req,res){
 };
 
 exports.inventory = function(req,res){
-    res.send(true);
+    res.send([{sprite: 'yellow-potion.png', id: '1', classId:'1', className:'CIIC5995', name:'Item 1', effect:'Testing'}, {sprite: 'scroll.png', id: '2', classId:'2', className:'ICOM5995', name:'Item 2' ,effect:'Testing 2'}]);
 };

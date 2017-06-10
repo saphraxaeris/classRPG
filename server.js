@@ -66,12 +66,16 @@ app.post('/user/register',user.register);
 app.get('/user/profile',user.getProfile);
 app.post('/user/profile', user.profile);
 
-app.get('/user/getInventory',user.getInventory);
-app.get('/user/inventory', user.inventory);
+app.get('/user/getInventory',user.inventory);
+app.get('/user/inventory', user.getInventory);
 
-app.get('/classes/getClasses',user.getClasses);
-app.get('/classes/classes', user.classes);
-app.get('/classes/class', user.class);
+app.get('/classes/getClasses',classes.classes);
+app.get('/classes/classes', classes.getClasses);
+app.get('/classes/class', classes.class);
+app.get('/classes/classInfoStudent', classes.classInfoStudent);
+app.get('/classes/classInfoProfessor', classes.classInfoProfessor);
+app.post('/classes/update', classes.updateClassInfo);
+app.post('/classes/addItem', classes.addItem);
 
 app.get('/',home.getHome);
 
