@@ -163,6 +163,12 @@ table.highlight > tbody > tr:hover {
     box-shadow: none;
 }
 
+.coin-sprite {
+	width:20px;
+	margin-left: 5px;
+	margin-right: 3px; 
+}
+
 .overlay {
     /* Height & width depends on how you want to reveal the overlay (see JS below) */
     height: 100%;

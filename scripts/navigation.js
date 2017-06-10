@@ -299,6 +299,7 @@ var Navigation = function() {
                         var html = "<tr><td><img class='sprite' alt='sprite' src='../images/"+ inventory[i].sprite +"'></td><td>" + inventory[i].className + "</td><td>" + inventory[i].name + "</td><td>" + inventory[i].effect + "</td></tr>";
                         $('tbody').append(html);
                     }
+                    $('#coins').text(JSON.parse(Cookies.get(cookieName)).gold);
                     hideLoading();
                 },
                 error : function() {
