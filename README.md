@@ -1,6 +1,11 @@
 # TO-DO - General
-* Professors create assignments for class
+* Professor sees list of assignments of a class
+* Professor can remove specific assignments
+* Professor can edit specific assignments
+* Professor can see who has taken an assignment and their respective grade
 * Students can complete assignments of a class
+* Students sees list of assignments of a class
+* Students can see assignments they have taken and their respective grade
 
 # TO-DO - Back End
 ## Endpoints
@@ -58,6 +63,17 @@
 ### POST: /classes/addItem
 * Send: (classId: classId, name: itemName, effect: itemEffect, sprite: sprite)
 * Recieve Ok: [nothing extra needed]
+* Recieve error: [nothing extra needed]
+
+### POST: classes/addAssignment
+* Send: { classId: classId, name: "", description: "", questions: questions}
+** questions = [{description: "", type: "", fillAnswer: "", correct_choice: "", choice1: "", choice2: "", choice3: "", choice4: ""}, ...]
+* Recieve Ok: [nothing extra needed]
+* Recieve error: [nothing extra needed]
+
+### GET: classes/assignments
+* Send: { classId: classId }
+* Recieve Ok: [{ classId: classId, name: "", description: "", questions: questions}, ...]
 * Recieve error: [nothing extra needed]
 
 ## Objects:

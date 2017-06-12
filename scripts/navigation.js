@@ -173,39 +173,143 @@ var Navigation = function() {
     var handleQuestionAdd = function() {
         $('#question-add-btn').on('click', function(e){      
             e.preventDefault();      
-            var html = "<section class='z-depth-3 col s12' style='background-color:#f9ede7;margin: 10px 0;'><div class='input-field col s12 m9'><input type='text' placeholder=''><label>Description</label></div>";
-            html += "<div class='input-field col s12 m3'><select class='question-type'><option value='fill-blank'>Fill in the Blank</option><option value='mult-choice'>Multiple Choice</option>";
+            var html = "<section class='z-depth-3 col s12' style='background-color:#f9ede7;margin: 10px 0;'><div class='input-field col s12 m9'><input class='question-description' type='text' placeholder=''><label>Description</label></div>";
+            html += "<div class='input-field col s12 m3'><select class='question-type'><option selected value='fill-blank'>Fill in the Blank</option><option value='mult-choice'>Multiple Choice</option>";
             html += "</select><label>Question Type</label></div>";
 
             //Fill in the blank field
             html += "<div class='input-field fill-blank-answer col s12'><input type='text' placeholder=''><label>Answer</label></div>";
 
+             var id = $('#assignment-questions').children.length;
+
             //Multiple choice fields
-            html += "<div class='mult-choices-options' style='display:none;'><div class='input-field col s12 m3'><input name='group1' type='radio' id='option1'/><label for='option1'>Option 1</label></div>";
-            html += "<div class='input-field col s12 m3'><input name='group1' type='radio' id='option2'/><label for='option1'>Option 2</label></div>";
-            html += "<div class='input-field col s12 m3'><input name='group1' type='radio' id='option3'/><label for='option1'>Option 3</label></div>";
-            html += "<div class='input-field col s12 m3'><input name='group1' type='radio' id='option4'/><label for='option1'>Option 4</label></div>";
-            html += "<div class='input-field col s12 m3'><input type='text' placeholder=''><label>Option 1 </label></div>";
-            html += "<div class='input-field col s12 m3'><input type='text' placeholder=''><label>Option 2 </label></div>";
-            html += "<div class='input-field col s12 m3'><input type='text' placeholder=''><label>Option 3 </label></div>";
-            html += "<div class='input-field col s12 m3'><input type='text' placeholder=''><label>Option 4 </label></div></div>";
+            html += "<div class='mult-choices-options' style='display:none;'><div class='col s12'><h6>Correct Answer</h6></div><div class='input-field col s12 m3'><input class='check1' name='group" + id + "' type='radio' id='option1-" + id + "'/><label for='option1-" + id + "'>Option 1</label></div>";
+            html += "<div class='input-field col s12 m3'><input class='check2' name='group" + id + "' type='radio' id='option2-" + id + "'/><label for='option2-" + id + "'>Option 2</label></div>";
+            html += "<div class='input-field col s12 m3'><input class='check3' name='group" + id + "' type='radio' id='option3-" + id + "'/><label for='option3-" + id + "'>Option 3</label></div>";
+            html += "<div class='input-field col s12 m3'><input class='check4' name='group" + id + "' type='radio' id='option4-" + id + "'/><label for='option4-" + id + "'>Option 4</label></div>";
+            html += "<div class='input-field margin-top-25 col s12 m3'><input class='choice1' type='text' placeholder=''><label>Option 1 </label></div>";
+            html += "<div class='input-field margin-top-25 col s12 m3'><input class='choice2' type='text' placeholder=''><label>Option 2 </label></div>";
+            html += "<div class='input-field margin-top-25 col s12 m3'><input class='choice3' type='text' placeholder=''><label>Option 3 </label></div>";
+            html += "<div class='input-field margin-top-25 col s12 m3'><input class='choice4' type='text' placeholder=''><label>Option 4 </label></div></div>";
 
             html += "</section>";
             $('#assignment-questions').append(html);
-            $('select').material_select();        
+            $('select.question-type').on('change', function(){
+                var selected = $(this).parent().find('ul').find('li.active').find('span').text();
+                if(selected == "Fill in the Blank") {
+                    $(this).parent().parent().parent().find('.fill-blank-answer').fadeIn()
+                    $(this).parent().parent().parent().find('.mult-choices-options').fadeOut()
+                }
+                else {
+                    $(this).parent().parent().parent().find('.mult-choices-options').fadeIn()
+                    $(this).parent().parent().parent().find('.fill-blank-answer').fadeOut()
+                }
+            }).material_select();        
+            $.each($('div.question-type'), function(){
+                $(this).find('ul.select-dropdown').find('li')[0].className += 'active ';
+                $(this).find('ul.select-dropdown').find('li')[0].className += 'selected';
+            });
         });
     };
 
-    var handleQuestionTypeChange = function() {
-        //$('.question-type').parent().parent().find('.mult-choices-options').fadeIn()
-        
-    };
-
     var handleAssignmentAdd = function() {
-        $('#add-assignment-btn').on('click', function(){
-            //ajax to save assignment
-            
-            //setTimeout(function(){ location.reload(); }, 3000);
+        $('#add-assignment-btn').on('click', function(e){
+            e.preventDefault();
+            var questions = [];
+            var assignmentName = $('#assignment-name').val();
+            var assignmentDescription = $('#assignment-description').val();
+
+            if(assignmentName.length == 0) {
+                showFailedPopup("Assigment needs a name.");
+                return;
+            }
+
+            if(assignmentDescription.length == 0) {
+                showFailedPopup("Assigment needs a description.");
+                return;
+            }
+
+            if($('#assignment-questions').children().length == 0) {
+                showFailedPopup("Assigment needs at least one description.");
+                return;
+            }
+
+            $.each($('#assignment-questions').children(), function(){
+                var question = {};
+                var description = $(this).find('.question-description').val();
+
+                if(description.length == 0) {
+                    showFailedPopup("All questions must have a description.");
+                    return;
+                }
+
+                 var type = $(this).find('ul.select-dropdown').find('li.active').find('span').text();
+                 question.description = description;
+                 question.type = type;
+                 if(type == "Fill in the Blank") {
+                     var fillAnswer = $(this).find('.fill-blank-answer').find('input').val();
+                     if(fillAnswer.length == 0) {
+                        showFailedPopup("All fill in the blank questions must have an answer.");
+                        return;
+                    }
+                     question.fill_blank_answer = fillAnswer;
+                 }
+                 else {
+                    var option1 = $(this).find('.mult-choices-options').find('.check1').is(':checked');
+                    var option2 = $(this).find('.mult-choices-options').find('.check2').is(':checked');
+                    var option3 = $(this).find('.mult-choices-options').find('.check3').is(':checked');
+                    var option4 = $(this).find('.mult-choices-options').find('.check4').is(':checked');
+                    if(option1) {
+                        question.correct_choice = '1';
+                    }  
+                    else if(option2) {
+                        question.correct_choice = '2';
+                    }  
+                    else if(option3) {
+                        question.correct_choice = '3';
+                    }  
+                    else {
+                        question.correct_choice = '4';
+                    }  
+
+                    var choice1 = $(this).find('.mult-choices-options').find('.choice1').val();
+                    var choice2 = $(this).find('.mult-choices-options').find('.choice2').val();
+                    var choice3 = $(this).find('.mult-choices-options').find('.choice3').val();
+                    var choice4 = $(this).find('.mult-choices-options').find('.choice4').val();
+
+                    if(choice1.length == 0 || choice2.length == 0 || choice3.length == 0 || choice4.length == 0) {
+                        showFailedPopup("All multiple choice questions must have four options.");
+                        return;
+                    }
+                    question.choice1 = choice1;
+                    question.choice2 = choice2;
+                    question.choice3 = choice3;
+                    question.choice4 = choice4;
+                 }
+                 questions.push(question);
+            });
+            if(questions.length == $('#assignment-questions').children().length) {
+                var url = new URL(window.location.href);
+                var id = url.searchParams.get("classId");
+                var assignment = { classId: id, questions: questions};
+
+                showLoading();
+                $.ajax({
+                    type: "POST",
+                    url: siteUrl + "classes/addAssignment",
+                    dataType: "json",
+                    data: JSON.stringify(assignment),
+                    contentType: "application/json; charset=utf-8",
+                    success: function(classInfo){
+                        showSuccessPopup('Successfully added assignment.');
+                        setTimeout(function(){ location.reload(); }, 1500);
+                    },
+                    error : function() {
+                        hideLoading();
+                        showFailedPopup('Failed to add assignment.');
+                    }
+                });
+            }
         });
     };
 
@@ -395,6 +499,7 @@ var Navigation = function() {
                     return;
                 }
 
+                showLoading();
                 var item = {name: name, effect: effect, sprite: sprite, classId: id};
                 $.ajax({
                     type: "POST",
@@ -403,9 +508,8 @@ var Navigation = function() {
                     data: JSON.stringify(item),
                     contentType: "application/json; charset=utf-8",
                     success: function(classInfo){
-                        hideLoading();
                         showSuccessPopup('Successfully added item.');
-                        setTimeout(function(){ location.reload(); }, 3000);
+                        setTimeout(function(){ location.reload(); }, 1500);
                     },
                     error : function() {
                         hideLoading();
@@ -437,7 +541,6 @@ var Navigation = function() {
                 });
             });
             handleQuestionAdd();
-            handleQuestionTypeChange();
             handleAssignmentAdd();
             showLoading();
             $.ajax({
