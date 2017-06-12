@@ -143,7 +143,24 @@
 <section id="add-assignment-modal" class="modal bottom-sheet">
     <div class="modal-content">
         <h4>Add Assignment<button class="modal-action modal-close btn-flat right"><i class="fa fa-times"></i></button></h4>
-        <p>A bunch of text</p>
+        <form id="add-assignment-form">
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="assignment-name" type="text" placeholder="">
+                    <label for="assignment-name">Name</label>
+                </div>
+                <div class="input-field col s12">
+                    <input id="assignment-description" type="text" placeholder="">
+                    <label for="assignment-description">Description</label>
+                </div>
+                <div class="col s12">
+                    <h5>Questions<button id="question-add-btn" class="btn right">Add Question</button></h5>
+                </div>
+                <div id="assignment-questions" class="col s12">
+                    
+                </div>
+            </div>
+        </form>
     </div>
     <div class="modal-footer">
         <button id="add-assignment-btn" class="modal-action modal-close waves-effect waves-green btn">Save</button>

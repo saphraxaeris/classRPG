@@ -170,6 +170,45 @@ var Navigation = function() {
             replaceLoginStuff();
     };
 
+    var handleQuestionAdd = function() {
+        $('#question-add-btn').on('click', function(e){      
+            e.preventDefault();      
+            var html = "<section class='z-depth-3 col s12' style='background-color:#f9ede7;margin: 10px 0;'><div class='input-field col s12 m9'><input type='text' placeholder=''><label>Description</label></div>";
+            html += "<div class='input-field col s12 m3'><select class='question-type'><option value='fill-blank'>Fill in the Blank</option><option value='mult-choice'>Multiple Choice</option>";
+            html += "</select><label>Question Type</label></div>";
+
+            //Fill in the blank field
+            html += "<div class='input-field fill-blank-answer col s12'><input type='text' placeholder=''><label>Answer</label></div>";
+
+            //Multiple choice fields
+            html += "<div class='mult-choices-options' style='display:none;'><div class='input-field col s12 m3'><input name='group1' type='radio' id='option1'/><label for='option1'>Option 1</label></div>";
+            html += "<div class='input-field col s12 m3'><input name='group1' type='radio' id='option2'/><label for='option1'>Option 2</label></div>";
+            html += "<div class='input-field col s12 m3'><input name='group1' type='radio' id='option3'/><label for='option1'>Option 3</label></div>";
+            html += "<div class='input-field col s12 m3'><input name='group1' type='radio' id='option4'/><label for='option1'>Option 4</label></div>";
+            html += "<div class='input-field col s12 m3'><input type='text' placeholder=''><label>Option 1 </label></div>";
+            html += "<div class='input-field col s12 m3'><input type='text' placeholder=''><label>Option 2 </label></div>";
+            html += "<div class='input-field col s12 m3'><input type='text' placeholder=''><label>Option 3 </label></div>";
+            html += "<div class='input-field col s12 m3'><input type='text' placeholder=''><label>Option 4 </label></div></div>";
+
+            html += "</section>";
+            $('#assignment-questions').append(html);
+            $('select').material_select();        
+        });
+    };
+
+    var handleQuestionTypeChange = function() {
+        //$('.question-type').parent().parent().find('.mult-choices-options').fadeIn()
+        
+    };
+
+    var handleAssignmentAdd = function() {
+        $('#add-assignment-btn').on('click', function(){
+            //ajax to save assignment
+            
+            //setTimeout(function(){ location.reload(); }, 3000);
+        });
+    };
+
 	return {
         InitLogin: function () {
             //verifyLogin();
@@ -366,6 +405,7 @@ var Navigation = function() {
                     success: function(classInfo){
                         hideLoading();
                         showSuccessPopup('Successfully added item.');
+                        setTimeout(function(){ location.reload(); }, 3000);
                     },
                     error : function() {
                         hideLoading();
@@ -396,7 +436,9 @@ var Navigation = function() {
                     }
                 });
             });
-
+            handleQuestionAdd();
+            handleQuestionTypeChange();
+            handleAssignmentAdd();
             showLoading();
             $.ajax({
                 type: "GET",
