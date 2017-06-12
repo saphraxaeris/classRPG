@@ -180,7 +180,7 @@ var Navigation = function() {
             //Fill in the blank field
             html += "<div class='input-field fill-blank-answer col s12'><input type='text' placeholder=''><label>Answer</label></div>";
 
-             var id = $('#assignment-questions').children.length;
+             var id = $('#assignment-questions').children().length;
 
             //Multiple choice fields
             html += "<div class='mult-choices-options' style='display:none;'><div class='col s12'><h6>Correct Answer</h6></div><div class='input-field col s12 m3'><input class='check1' name='group" + id + "' type='radio' id='option1-" + id + "'/><label for='option1-" + id + "'>Option 1</label></div>";
