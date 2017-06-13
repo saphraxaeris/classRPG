@@ -67,12 +67,12 @@
 
 ### POST: classes/addAssignment
 * Send: { classId: classId, name: "", description: "", questions: questions}
-** questions = [{description: "", type: "", fillAnswer: "", correct_choice: "", choice1: "", choice2: "", choice3: "", choice4: ""}, ...]
+* * questions = [{description: "", type: "", fillAnswer: "", correct_choice: "", choice1: "", choice2: "", choice3: "", choice4: ""}, ...]
 * Recieve Ok: [nothing extra needed]
 * Recieve error: [nothing extra needed]
 
 ### GET: classes/assignments
-* Send: { classId: classId }
+* Send: { classId: classId, userId: userId } //only professors should be able to get this data
 * Recieve Ok: [{ classId: classId, name: "", description: "", questions: questions}, ...]
 * Recieve error: [nothing extra needed]
 
