@@ -87,7 +87,7 @@
                         </tr>
                         </thead>
 
-                        <tbody>
+                        <tbody class="items-table">
                             
                         </tbody>
                     </table>
@@ -99,13 +99,50 @@
 			<section class="card grey lighten-3 z-depth-4">
 				<div class="card-content">
 					<span class="card-title bold">Assignments<button data-target="add-assignment-modal" class="btn teal right">Add Assignment</button></span>
-                    
+                    <table class="bordered highlight">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+
+                        <tbody class="assignments-table">
+                            
+                        </tbody>
+                    </table>
 				</div>
 			</section>
 		</div>
 	</div>
 </div>
 
+
+<!-- Students Modal -->
+<section id="students-modal" class="modal">
+    <div class="modal-content">
+        <h4>Students<button class="modal-action modal-close btn-flat right"><i class="fa fa-times"></i></button></h4>
+        <table class="bordered highlight">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Student Id</th>
+                <th>Grade</th>
+                <th>Item Used Effect</th>
+            </tr>
+            </thead>
+            <tbody class="students-table">
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <button class="modal-action modal-close waves-effect waves-green btn">Close</button>
+    </div>
+</section>
 
 <!-- Add Item Modal -->
 <section id="add-item-modal" class="modal bottom-sheet">
@@ -152,6 +189,14 @@
                 <div class="input-field col s12">
                     <input id="assignment-description" type="text" placeholder="">
                     <label for="assignment-description">Description</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="assignment-start-date" type="date" class="datepicker">
+                    <label for="assignment-start-date">Start Date</label>
+                </div>
+                <div class="input-field col s6">
+                    <input id="assignment-end-date" type="date" class="datepicker">
+                    <label for="assignment-end-date">End Date</label>
                 </div>
                 <div class="col s12">
                     <h5>Questions<button id="question-add-btn" class="btn right">Add Question</button></h5>

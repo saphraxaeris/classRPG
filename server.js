@@ -76,7 +76,13 @@ app.get('/classes/classInfoStudent', classes.classInfoStudent);
 app.get('/classes/classInfoProfessor', classes.classInfoProfessor);
 app.post('/classes/update', classes.updateClassInfo);
 app.post('/classes/addItem', classes.addItem);
-
+app.get('/classes/assignments', classes.assignments);
+app.get('/classes/assignment', classes.assignment);
+app.get('/classes/assignmentQuestions', classes.assignmentQuestions);
+app.post('/classes/submitAssignment', classes.submitAssignment);
+app.get('/classes/whoHasTaken', classes.whoHasTaken);
+app.get('/classes/whatHasTaken', classes.whatHasTaken);
+app.post('/classes/deleteAssignment', classes.deleteAssignment);
 app.get('/',home.getHome);
 
 

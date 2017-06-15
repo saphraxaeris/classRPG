@@ -1,11 +1,5 @@
 # TO-DO - General
-* Professor sees list of assignments of a class
-* Professor can remove specific assignments
 * Professor can edit specific assignments
-* Professor can see who has taken an assignment and their respective grade
-* Students can complete assignments of a class
-* Students sees list of assignments of a class
-* Students can see assignments they have taken and their respective grade
 
 # TO-DO - Back End
 ## Endpoints
@@ -45,6 +39,19 @@
 ### GET: /classes/class?userId=[id]&classId=[id]
 * Return: If userId belongs to student classStudent.html, else classProfessor.html
 
+### GET: /classes/assignment?classId=[id]&assignmentId=[id]
+* Return page
+
+### GET: /classes/assignmentQuestions
+Send: { classId: classId, assignmentId: assignmentId }
+Recieve ok: { assignmentName: "", assignmentDescription: "", questions: [{description: "", type: "", choice1: "", choice2: "", choice3: "", choice4: ""}, ...] } //If question type is fill-blank choice1, choice2, ... can be empty
+Recieve error: [nothing extra needed]
+
+### POST: /classes/submitAssignment
+Send: { classId: classId, assignmentId: assignmentId, userId: userId, answers: [{type: "", answer: ""}, ...] } //type = fill-blank/mult-choice, answer if fill-blank == text, answer if mult-choice == choice #
+Recieve ok: [nothing extra needed]
+Recieve error: [nothing extra needed]
+
 ### Get: /classes/classInfoStudent
 * Send: { classId: classId }
 * Recieve Ok: Class object
@@ -66,18 +73,32 @@
 * Recieve error: [nothing extra needed]
 
 ### POST: classes/addAssignment
-* Send: { classId: classId, name: "", description: "", questions: questions}
+* Send: { classId: classId, name: "", description: "", startDate: "". endDate: "", questions: questions}
 * * questions = [{description: "", type: "", fillAnswer: "", correct_choice: "", choice1: "", choice2: "", choice3: "", choice4: ""}, ...]
 * Recieve Ok: [nothing extra needed]
 * Recieve error: [nothing extra needed]
 
 ### GET: classes/assignments
-* Send: { classId: classId, userId: userId } //only professors should be able to get this data
-* Recieve Ok: [{ classId: classId, name: "", description: "", questions: questions}, ...]
+* Send: { classId: classId, userId: userId } 
+* Recieve Ok: [{ assignmentId: assignmentId, classId: classId, name: "", description: "", startDate: "". endDate: "", hasTaken: true/false questions: questions}, ...] //only professors should be able to recieve questions of assignments, students still recieve everything else. hasTaken should be true if student has completed assignment
+* Recieve error: [nothing extra needed]
+
+### GET: classes/whoHasTaken
+* Send: { classId: classId, assignmentId: assignmentId, userId: userId }
+* Recieve Ok: [{ userId: userId, name: "", studentId: "", grade: "", itemEffect: "" }, ...] //Only if userId sent belongs to professor that owns class with classId sent
+* Recieve error: [nothing extra needed]
+
+### GET: classes/whatHasTaken
+* Send: { classId: classId, userId: userId }
+* Recieve Ok: [{ assignmentName: "", grade: "", itemEffect: "" }, ...] //List of assignments of classId user has taken
+* Recieve error: [nothing extra needed]
+
+### POST: classes/deleteAssignment
+* Send: { classId: classId, assignmentId: assignmentId, userId: userId }
+* Recieve ok: [nothing extra needed]
 * Recieve error: [nothing extra needed]
 
 ## Objects:
 * User: { [something] id, string username, string name string email, string studentId, string password, bool student, string office, int gold }
 * Class: { [something] id, string name, User professor, string department, string code, string officeHours }
-* Announcements: { [something] id, [something] classId, string title, string description }
 * Item: { [something] id, [something] classId, string className, string name, string effect, string sprite }

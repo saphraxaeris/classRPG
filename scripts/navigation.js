@@ -2,6 +2,7 @@ var Navigation = function() {
     var siteUrl = "http://localhost:8080/";
     var cookieExpiration = 3;
     var cookieName = "classRPG-user";
+    var timeLimit = 30;
 
     var showLoading = function () {
         $('.overlay').fadeIn();
@@ -218,6 +219,8 @@ var Navigation = function() {
             var questions = [];
             var assignmentName = $('#assignment-name').val();
             var assignmentDescription = $('#assignment-description').val();
+            var startDate = $('#assignment-start-date').val();
+            var endDate = $('#assignment-end-date').val();
 
             if(assignmentName.length == 0) {
                 showFailedPopup("Assigment needs a name.");
@@ -226,6 +229,16 @@ var Navigation = function() {
 
             if(assignmentDescription.length == 0) {
                 showFailedPopup("Assigment needs a description.");
+                return;
+            }
+
+            if(startDate.length == 0) {
+                showFailedPopup("Assigment needs a start date.");
+                return;
+            }
+
+            if(endDate.length == 0) {
+                showFailedPopup("Assigment needs an end date.");
                 return;
             }
 
@@ -311,6 +324,97 @@ var Navigation = function() {
                 });
             }
         });
+    };
+
+    var handleQuestionsHtml = function(questions){
+        for(i = 0; i < questions.length; i++) {
+            var html = "<div data-type='"+ questions[i].type +"' class='col l12 m12 s12'><section class='card grey lighten-3 z-depth-4'><div class='card-content'><span class='card-title bold'>" + (i+1) +"." + questions[i].description + "</span><div class='row'>";
+            if(questions[i].type === "fill-blank") {
+                html += "<div class='input-field fill-blank-answer col s12'><input type='text' placeholder=''><label>Answer</label></div>";
+            }
+            else {
+                html += "<div class='mult-choices-options'><div class='input-field col s12 m3'><input class='check1' name='group" + i + "' type='radio' id='option1-" + i + "'/><label for='option1-" + i + "'>" + questions[i].choice1 + "</label></div>";
+                html += "<div class='input-field col s12 m3'><input class='check2' name='group" + i + "' type='radio' id='option2-" + i + "'/><label for='option2-" + i + "'>" + questions[i].choice2 + "</label></div>";
+                html += "<div class='input-field col s12 m3'><input class='check3' name='group" + i + "' type='radio' id='option3-" + i + "'/><label for='option3-" + i + "'>" + questions[i].choice3 + "</label></div>";
+                html += "<div class='input-field col s12 m3'><input class='check4' name='group" + i + "' type='radio' id='option4-" + i + "'/><label for='option4-" + i + "'>" + questions[i].choice4 + "</label></div>"
+            }
+            html += "</div></div></section></div>";
+            $('#assignment-questions').append(html);
+        }
+    };
+
+    var submitAssignment = function() {
+        showLoading();
+        var answers = [];
+        $.each($('#assignment-questions').children(), function(){
+            var answer = {};
+            if($(this).data("type")==="fill-blank") {
+                answer.type = "fill-blank";
+                answer.answer = $(this).find('.fill-blank-answer').find('input').val();
+            }
+            else {
+                answer.type = "mult-choice";
+                var option1 = $(this).find('.mult-choices-options').find('.check1').is(':checked');
+                var option2 = $(this).find('.mult-choices-options').find('.check2').is(':checked');
+                var option3 = $(this).find('.mult-choices-options').find('.check3').is(':checked');
+                var option4 = $(this).find('.mult-choices-options').find('.check4').is(':checked');
+                if(option1) {
+                    answer.answer = '1';
+                }  
+                else if(option2) {
+                    answer.answer = '2';
+                }  
+                else if(option3) {
+                    answer.answer = '3';
+                }  
+                else {
+                    answer.answer = '4';
+                }  
+            }
+            answers.push(answer);
+        });
+
+        var url = new URL(window.location.href);
+        var classId = url.searchParams.get("classId");
+        var assignmentId = url.searchParams.get("assignmentId");
+        var userId = JSON.parse(Cookies.get(cookieName)).id;
+        
+        $.ajax({
+            type: "POST",
+            url: siteUrl + "classes/submitAssignment",
+            dataType: "json",
+            data: JSON.stringify({classId: classId, assignmentId: assignmentId, userId: userId, answers: answers}),
+            contentType: "application/json; charset=utf-8",
+            success: function(){
+                showSuccessPopup('Assignment submitted!');
+                setTimeout(function(){ 
+                    window.location = siteUrl + "classes/class?userId=" + userId + "&classId=" + classId;
+                }, 1500);
+            },
+            error : function() {
+                hideLoading();
+                showFailedPopup('Failed to submit assignment.');
+            }
+        });
+    };
+
+    var handleAssignmentTimer = function() {
+        var later = new Date(new Date().getTime() + timeLimit*60000);
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+            var distance = later - now;
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            if (distance == 0) {
+                clearInterval(x);
+                showFailedPopup("Time limit exceeded.");
+                submitAssignment();
+                $('.timer').fadeOut();
+            }
+            else if (distance > 0) {
+                $('.timer').html(minutes+":"+seconds);
+            }
+        }, 1000);
     };
 
 	return {
@@ -453,6 +557,7 @@ var Navigation = function() {
         },
         InitClassStudent: function() {
             showLoading();
+            $('.modal').modal();
             var url = new URL(window.location.href);
             var id = url.searchParams.get("classId");
             $.ajax({
@@ -466,18 +571,62 @@ var Navigation = function() {
                     $('.class-professor').text(classInfo.professor.name);
                     $('.class-office').text(classInfo.professor.office);
                     $('.class-office-hours').text(classInfo.officeHours);
-                    hideLoading();
                 },
                 error : function() {
-                    hideLoading();
                     showFailedPopup('Failed to get class info.');
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: siteUrl + "classes/assignments",
+                dataType: "json",
+                data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName)).id}),
+                contentType: "application/json; charset=utf-8",
+                success: function(assignments){
+                    for(var i = 0, len = assignments.length; i < len; i++) {
+                        var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].description + "</td><td>" + assignments[i].startDate + "</td><td>" + assignments[i].endDate + "</td><td><button data-id='" + assignments[i].assignmentId + "' class='complete-assignment right btn teal'>Take assignment</button></td></tr>";
+                        if(!assignments[i].hasTaken) {
+                            $('tbody.assignments-not-taken-table').append(html);
+                        }
+                    }
+                    $('.complete-assignment').on('click', function(){
+                        $('#start-btn').data('id', $(this).data('id'));
+                        $('#start-assignment').modal('open');
+                        $('#start-btn').on('click', function(){
+                            var user = JSON.parse(Cookies.get(cookieName));
+                            window.location = siteUrl + "classes/assignment?&classId=" + id + "&assignmentId=" + $(this).data('id');
+                        });
+                    });
+                },
+                error: function(e){
+                    showFailedPopup('Failed to get class assignments.');
+                }
+            });
+
+            $.ajax({
+                type: "GET",
+                url: siteUrl + "classes/whatHasTaken",
+                dataType: "json",
+                data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName)).id}),
+                contentType: "application/json; charset=utf-8",
+                success: function(assignments){
+                    for(var i = 0, len = assignments.length; i < len; i++) {
+                        var html = "<tr><td>" + assignments[i].assignmentName + "</td><td>" + assignments[i].grade + "</td><td>" + assignments[i].itemEffect + "</td></tr>";
+                        $('tbody.assignments-taken-table').append(html);
+                    }
+                    hideLoading();
+                },
+                error: function(e){
+                    hideLoading();
+                    showFailedPopup('Failed to get class assignments.');
                 }
             });
         },
         InitClassProfessor: function() {
             var url = new URL(window.location.href);
             var id = url.searchParams.get("classId");
-
+            $('.datepicker').pickadate();
             $('.modal').modal();
             $('select').material_select();
             $('#add-item-btn').on('click', function(){
@@ -540,6 +689,7 @@ var Navigation = function() {
                     }
                 });
             });
+
             handleQuestionAdd();
             handleAssignmentAdd();
             showLoading();
@@ -553,15 +703,105 @@ var Navigation = function() {
                     $('#office-hours').val(classInfo.classInfo.officeHours);
                     for(var i = 0, len = classInfo.items.length; i < len; i++) {
                         var html = "<tr><td><img class='sprite' alt='sprite' src='../images/"+ classInfo.items[i].sprite +"'></td><td>" + classInfo.items[i].className + "</td><td>" + classInfo.items[i].name + "</td><td>" + classInfo.items[i].effect + "</td></tr>";
-                        $('tbody').append(html);
+                        $('tbody.items-table').append(html);
                     }
 
-                    hideLoading();
+                    $.ajax({
+                        type: "GET",
+                        url: siteUrl + "classes/assignments",
+                        dataType: "json",
+                        data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName)).id}),
+                        contentType: "application/json; charset=utf-8",
+                        success: function(assignments){
+                            for(var i = 0, len = assignments.length; i < len; i++) {
+                                var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].description + "</td><td>" + assignments[i].startDate + "</td><td>" + assignments[i].endDate + "</td><td><button data-id='" + assignments[i].assignmentId + "' class='view-taken btn teal'>Grades</button> <button data-id='" + assignments[i].assignmentId + "' class='delete-assignment btn red'>Delete</button></td></tr>";
+                                $('tbody.assignments-table').append(html);
+                            }
+                            $('.view-taken').on('click', function(e){
+                                e.preventDefault();
+                                var assignmentId = $(this).data('id');
+                                var userId = JSON.parse(Cookies.get(cookieName)).id;
+                                showLoading();
+                                $.ajax({
+                                        type: "GET",
+                                        url: siteUrl + "classes/whoHasTaken",
+                                        dataType: "json",
+                                        data: JSON.stringify({classId: id, userId: userId, assignmentId: assignmentId}),
+                                        contentType: "application/json; charset=utf-8",
+                                        success: function(assignments){
+                                            $('tbody.students-table').html('');
+                                            for(var i = 0, len = assignments.length; i < len; i++) {
+                                                var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].studentId + "</td><td>" + assignments[i].grade + "</td><td>" + assignments[i].itemEffect + "</td></tr>";
+                                                $('tbody.students-table').append(html);
+                                            }
+                                            hideLoading();
+                                            $('#students-modal').modal('open');
+                                        },
+                                        error: function(){
+                                            hideLoading();
+                                            showFailedPopup('Failed to get class assignments.');
+                                        }
+                                    });
+                            });
+                            $('.delete-assignment').on('click', function(){
+                                showLoading();
+                                $.ajax({
+                                    type: "POST",
+                                    url: siteUrl + "classes/deleteAssignment",
+                                    dataType: "json",
+                                    data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName)).id}),
+                                    contentType: "application/json; charset=utf-8",
+                                    success: function(){
+                                        showSuccessPopup('Assignment deleted!');
+                                        setTimeout(function(){ location.reload(); }, 1500);
+                                    },
+                                    error: function(){
+                                        hideLoading();
+                                        showFailedPopup('Failed to delete assignment.');
+                                    }
+                                });
+                            });
+                            hideLoading();
+                        },
+                        error: function(e){
+                            hideLoading();
+                            showFailedPopup('Failed to get class assignments.');
+                        }
+                    });
                 },
                 error : function() {
                     hideLoading();
                     showFailedPopup('Failed to get class info.');
                 }
+            });
+        },
+        InitStartAssignment: function() {
+            $('.modal').modal();
+            showLoading();
+            var url = new URL(window.location.href);
+            var classId = url.searchParams.get("classId");
+            var assignmentId = url.searchParams.get("assignmentId");
+            $.ajax({
+                type: "GET",
+                url: siteUrl + "classes/assignmentQuestions",
+                dataType: "json",
+                data: JSON.stringify({classId: classId, assignmentId: assignmentId}),
+                contentType: "application/json; charset=utf-8",
+                success: function(assignmentInfo){
+                    $('.assignment-name').text(assignmentInfo.assignmentName);
+                    $('.assignment-description').text(assignmentInfo.assignmentDescription);
+                    handleQuestionsHtml(assignmentInfo.questions);
+                    handleAssignmentTimer();
+                    hideLoading();
+                },
+                error : function() {
+                    hideLoading();
+                    showFailedPopup('Failed to get assignment info.');
+                }
+            });
+            handleAssignmentTimer();
+            $('#submit-btn').on('click', function(){
+                submitAssignment();
             });
         }
     }
