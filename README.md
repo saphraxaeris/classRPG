@@ -1,6 +1,10 @@
 # TO-DO - General
 * Professor can edit specific assignments
 
+# Opt-Out? Do after everythign else is done? Future Work?
+* Use item during assignment
+* Add item/gold reward when creating assignment
+
 # TO-DO - Back End
 ## Endpoints
 ### Register Post:
