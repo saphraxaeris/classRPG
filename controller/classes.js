@@ -1,7 +1,7 @@
 var path = require('path');
 var shortid = require('shortid');
 var BSON = require('bson');
-  user._id = new BSON.ObjectID(user._id).toString();
+
 db = {};
 exports.setVars = function(DB)
 {
@@ -37,44 +37,190 @@ exports.classes = function(req,res){
 
 /* Class */
 exports.class = function(req,res){
-    res.sendFile('classStudent.html',{root:"./view/classes"});
-    //res.sendFile('classProfessor.html',{root:"./view/classes"});
+    var users = db.collection('users');
+    users.findOne({_id:new BSON.ObjectID(req.query.userId).toString()}).then(function(user){
+        if(user){
+            if(user.student){
+                res.sendFile('classStudent.html',{root:"./view/classes"});
+            }
+            else{
+                res.sendFile('classProfessor.html',{root:"./view/classes"});
+            }
+        }
+        else{
+            res.status(400);
+            res.send("Error incorrect User");
+        }
+    });
+};
+
+
+exports.assignmentQuestions = function(req, res) {
+    var assignments = db.collection('assignments');
+    assignments.findOne({_id:req.query.assignmentId}).then(function(assignment){
+        if(assignment){
+            for(var i in assignment.questions){
+                if(i.type =='fill-blank'){
+                    delete(i.fillAnswer);
+                }
+                else{
+                    delete(i.correct_choice);
+                }
+            }
+            res.send(assignment);
+        }
+        else{
+            res.status(400);
+            res.send("Error - Incorrect assignment id");
+        }
+    });
+    
+};
+
+function getGrade(attempt){
+    
+
+}
+
+exports.submitAssignment = function(req, res) {
+    var assignments = db.collection('assignments');
+    assignments.findOne({_id:new BSON.ObjectId(req.body.assignmentId)}).then(function(assignment){
+        if(assignment){
+            var questions = assignment.questions;
+            var points = 0;
+            for(var i =0;i<questions.length;i++)
+            {
+                if(questions[i].type=='fill-blank'&&questions[i].fillAnswer == req.body.answers[i].answer){
+                    points++;
+                }
+                else if(questions[i].type=='mult-choice'&&questions[i].correct_choice == req.body.answers[i].answer){
+                    points++;
+                }
+            }
+            req.body.grade =  points*100/questions.length; 
+            var answers = db.collection('answers');
+            answers.insert(req.body,function(err,data){
+                if(err){
+                    res.status(400);
+                    res.send("Error inserting answers");
+                }
+                else{
+                    res.send(200);
+                }
+            });
+        }
+        else{
+            res.status(400);
+            res.send('Error - Assignment could not be found');
+        }
+    });
+};
+
+exports.classInfoStudent = function(req,res){
+    var classes = db.collection('classes');
+    classes.findOne({_id:new BSON.ObjectID(req.query.classId)}).then(function(cl){
+        if(cl){
+            var users = db.collection('users');
+            users.findOne({_id:new BSON.ObjectID(cl.professor_id)}).then(function(user){
+                if(user){
+                    delete(user.password);
+                    cl.professor = user;
+                    res.send(cl);
+                }
+                else{
+                    res.status(400);
+                    res.send("Error- Professor not found")
+                }
+            });
+        }
+        else{
+            res.status(400);
+            res.send('Error - Class not found');
+        }
+    });
+};
+
+exports.classInfoProfessor = function(req,res){
+    var classes = db.collection('classes');
+    classes.findOne({_id:new BSON.ObjectID(req.query.classId)}).then(function(cl){
+        if(cl){
+            var users = db.collection('users');
+            users.findOne({_id:new BSON.ObjectID(cl.professor_id)}).then(function(user){
+                if(user){
+                    delete(user.password);
+                    cl.professor = user;
+                    var items = db.collection('items');
+                    items.find({class_id:cl._id}).then(function(items){
+                        if(items){
+                            res.send({classInfo:cl,items:items});
+                        }
+                        else{
+                            res.status(400);
+                            res.send("Error - items not found");
+                        }
+                    });
+                    
+                }
+                else{
+                    res.status(400);
+                    res.send("Error- Professor not found")
+                }
+            });
+        }
+        else{
+            res.status(400);
+            res.send('Error - Class not found');
+        }
+    });
+};
+
+exports.updateClassInfo = function(req,res){
+    var classes = db.collection('classes');
+    classes.findOne({_id:new BSON.ObjectId(req.body.classId)}).then(function(cl){
+        if(cl){
+            cl.officeHours = req.body.officeHours;
+            classes.update({_id:cl._id},cl, function(err,results){
+                if(err){
+                    res.status(400);
+                    res.send("Error Updating "+err);
+                }
+                else{
+                    res.send(200);
+                }
+            });
+        }
+        else{
+            res.status(200);
+            res.send("Error - couldn't find class");
+        }
+    });
+};
+
+exports.addItem = function(req,res){
+    var items = db.collection('items');
+    var classes = db.collection('classes');
+    classes.findOne({_id: new BSON.ObjectId(req.body.classId)}).then(function(cl){
+        if(cl){
+            req.body.className = cl.name; 
+            items.insert(req.body,function(err,result){
+                if(err){
+                    res.status(400);
+                    res.send('Error - couldn\'t insert item');
+                }
+                else{
+                    res.send(200);
+                }
+            });
+        }
+        else{
+            res.status(400);
+            res.send('Error - couldn\'t find class');
+        }
+    });
 };
 
 exports.assignment = function(req, res) {
     res.sendFile('assignment.html',{root:"./view/classes"});
-};
-
-exports.assignmentQuestions = function(req, res) {
-    var data = { assignmentName: "Test Assignment", assignmentDescription: "Testing the description of this assignment" };
-    var questions = [{description: "test test test test test ____ test.", type:"fill-blank"}, {description: "What # follows 1?", type:"mult-choice", choice1: "A", choice2: "34", choice3: "Dog", choice4: "2" }];
-    data.questions = questions;
-    res.send(data);
-};
-
-exports.submitAssignment = function(req, res) {
-    res.send(true);
-};
-
-exports.classInfoStudent = function(req,res){
-    var user = {id: 'test', username: 'ahchinaei', name: 'Amir H. Chinaei', email: 'ahchinaei@ece.uprm.edu', student: false, office: 'OH-326'};
-    var classInfo = { id:'test', name:'Wed Development', professor: user, department: 'CIIC', code:'CIIC5995', officeHours: 'Tuesdays & Thursday @ 2:30pm - 3:30pm'  };
-    res.send(classInfo);
-};
-
-exports.classInfoProfessor = function(req,res){
-    var user = {id: 'test', username: 'ahchinaei', name: 'Amir H. Chinaei', email: 'ahchinaei@ece.uprm.edu', student: false, office: 'OH-326'};
-    var classInfo = { id:'test', name:'Wed Development', professor: user, department: 'CIIC', code:'CIIC5995', officeHours: 'Tuesdays & Thursday @ 2:30pm - 3:30om'  };
-    var items = [{sprite: 'yellow-potion.png', id: '1', classId:'1', className:'CIIC5995', name:'Item 1', effect:'Testing'}, {sprite: 'scroll.png', id: '2', classId:'2', className:'ICOM5995', name:'Item 2' ,effect:'Testing 2'}];
-    res.send({ classInfo: classInfo, items:  items});
-};
-
-exports.updateClassInfo = function(req,res){
-    res.send(true);
-};
-
-exports.addItem = function(req,res){
-    res.send(true);
 };
 
 exports.assignments = function(req, res){
@@ -83,6 +229,13 @@ exports.assignments = function(req, res){
 };
 
 exports.whoHasTaken = function(req, res) {
+    var assignments = db.collection('assignments');
+    assignments.findOne({_id:new BSON.ObjectId(req.query.assignmentId)}).then(function(assignment){
+        if(assignment){
+            if(assignment.professor_id)
+        }
+    });
+    
     var data = [{ userId: "0", name: "Stephan Elias Remy", studentId: "802-12-2205", grade: "98%", itemEffect: "Test Item was used" }];
     res.send(data);
 };

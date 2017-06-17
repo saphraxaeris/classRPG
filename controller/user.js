@@ -1,6 +1,6 @@
 var path = require('path');
 var shortid = require('shortid');
-
+var BSON = require('bson');
 db = {};
 exports.setVars = function(DB)
 {
@@ -62,7 +62,7 @@ exports.profile = function(req,res){
     users.findOne({username:req.body.username}).then(function(user) {
         if(user){
             user.password = req.body.password;
-            users.update({_id:user._id},user,function(err, results) {
+            users.update({username:req.body.username},user,function(err, results) {
                 if (err) {
                     res.status(400);
                     res.send('An error has occurred - ' + err);

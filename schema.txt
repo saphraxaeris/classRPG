@@ -5,7 +5,7 @@ users
     studentId
     email
     password
-    isStudent
+    student
     office
     gold
     items[]
@@ -28,4 +28,14 @@ items
 assignments
     _id
     class_id
-    
+    name
+    description
+    questions[{description, type, choice1,choice2,choice3,choice4,answer},...]
+answers
+    _id
+    class_id
+    assignment_id
+    user_id
+    grade
+    asnwers[type:"",answer:""]
+

@@ -43,40 +43,40 @@
 `Done`
 ### GET: /classes/class?userId=[id]&classId=[id]
 * Return: If userId belongs to student classStudent.html, else classProfessor.html
-
+`Done`
 ### GET: /classes/assignment?classId=[id]&assignmentId=[id]
 * Return page
-
+`Done`
 ### GET: /classes/assignmentQuestions
 Send: { classId: classId, assignmentId: assignmentId }
 Recieve ok: { assignmentName: "", assignmentDescription: "", questions: [{description: "", type: "", choice1: "", choice2: "", choice3: "", choice4: ""}, ...] } //If question type is fill-blank choice1, choice2, ... can be empty
 Recieve error: [nothing extra needed]
-
+`Done`
 ### POST: /classes/submitAssignment
 Send: { classId: classId, assignmentId: assignmentId, userId: userId, answers: [{type: "", answer: ""}, ...] } //type = fill-blank/mult-choice, answer if fill-blank == text, answer if mult-choice == choice #
 Recieve ok: [nothing extra needed]
 Recieve error: [nothing extra needed]
-
+`Done`
 ### Get: /classes/classInfoStudent
 * Send: { classId: classId }
 * Recieve Ok: Class object
 * Recieve error: string message with error to show to user
-
+`Done`
 ### Get: /classes/classInfoProfessor
 * Send: { classId: classId }
 * Recieve Ok: { classInfo: [class object], items: [ Item[] of items associated to class ] }
 * Recieve error: string message with error to show to user
-
+`Done`
 ### POST: /classes/update
 * Send: { classId: classId, officeHours: officeHours }
 * Recieve Ok: [nothing extra needed]
 * Recieve error: [nothing extra needed]
-
+`Done`
 ### POST: /classes/addItem
 * Send: (classId: classId, name: itemName, effect: itemEffect, sprite: sprite)
 * Recieve Ok: [nothing extra needed]
 * Recieve error: [nothing extra needed]
-
+`Done`
 ### POST: classes/addAssignment
 * Send: { classId: classId, name: "", description: "", startDate: "". endDate: "", questions: questions}
 * * questions = [{description: "", type: "", fillAnswer: "", correct_choice: "", choice1: "", choice2: "", choice3: "", choice4: ""}, ...]
