@@ -232,7 +232,9 @@ exports.whoHasTaken = function(req, res) {
     var assignments = db.collection('assignments');
     assignments.findOne({_id:new BSON.ObjectId(req.query.assignmentId)}).then(function(assignment){
         if(assignment){
-            if(assignment.professor_id)
+            if(assignment.professor_id == new BSON.ObjectId(req.body.userId)){
+                
+            }
         }
     });
     
