@@ -21,7 +21,7 @@
 * Return page
 `Done`
 ### POST: /user/profile
-* Send: { password: password }
+* Send: { username: "", password: password }
 * Recieve Ok: [nothing extra needed]
 * Recieve error: [nothing extra needed]
 `Done but need username sent as well`

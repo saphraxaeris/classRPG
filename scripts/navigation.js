@@ -79,6 +79,14 @@ var Navigation = function() {
 		});
 	};
 
+    var handleLogout = function() {
+        $('#logout-btn').on('click', function(){
+            showLoading();
+            Cookies.remove(cookieName);
+            setTimeout(function(){ window.location.replace(siteUrl); }, 1500);
+        });
+    };
+
     var handleRegister = function(){
 		$('#register-btn').on('click', function(e){
 			e.preventDefault();
@@ -158,6 +166,7 @@ var Navigation = function() {
     var replaceLoginStuff = function() {
         //Remove login/register buttons
         var html = "<li><a href='/user/profile'>"+ JSON.parse(Cookies.get(cookieName)).name +"</a></li>";
+        html += "<li id='logout-btn'><button class='btn-flat'>Logout</button></li>";
         $('.user-info').html(html);
     };
 
@@ -377,7 +386,7 @@ var Navigation = function() {
         var url = new URL(window.location.href);
         var classId = url.searchParams.get("classId");
         var assignmentId = url.searchParams.get("assignmentId");
-        var userId = JSON.parse(Cookies.get(cookieName)).id;
+        var userId = JSON.parse(Cookies.get(cookieName))._id;
         
         $.ajax({
             type: "POST",
@@ -420,10 +429,12 @@ var Navigation = function() {
 	return {
         InitLogin: function () {
             //verifyLogin();
+            handleLogout();
         	handleLogin();
         },
         InitRegister: function() {
             handleRegister();
+            handleLogout();
         },
         ForceLogin : function() {
             if(!Cookies.get(cookieName))
@@ -433,6 +444,7 @@ var Navigation = function() {
                 window.location = siteUrl + "user/login";
             }
             replaceLoginStuff();
+            handleLogout();
         },
         GoToHome: function() {
             window.location = siteUrl;
@@ -441,6 +453,7 @@ var Navigation = function() {
             if(Cookies.get(cookieName))
             {
                 replaceLoginStuff();
+                handleLogout();
                 return true;
             }
             else
@@ -457,6 +470,7 @@ var Navigation = function() {
             }
         },
         InitProfile: function() {
+            handleLogout();
             var user = JSON.parse(Cookies.get(cookieName));
             $('#username').val(user.username);
             $('#name').val(user.name);
@@ -493,7 +507,7 @@ var Navigation = function() {
                 type: "POST",
                 url: siteUrl + "user/profile",
                 dataType: "json",
-                data: JSON.stringify({password: password}),
+                data: JSON.stringify({username: JSON.parse(Cookies.get(cookieName)).username, password: password}),
                 contentType: "application/json; charset=utf-8",
                 success: function(){
                     hideLoading();
@@ -509,6 +523,7 @@ var Navigation = function() {
             });
         },
         InitClasses: function() {
+            handleLogout();
             showLoading();
             $.ajax({
                 type: "GET",
@@ -518,13 +533,13 @@ var Navigation = function() {
                 contentType: "application/json; charset=utf-8",
                 success: function(classes){
                     for(var i = 0, len = classes.length; i < len; i++) {
-                        var html = "<tr class='data-row' data-id='" + classes[i].id +"'><td>" + classes[i].name + "</td><td>" + classes[i].code + "</td><td>" + classes[i].professor.name + "</td></tr>";
+                        var html = "<tr class='data-row' data-id='" + classes[i]._id +"'><td>" + classes[i].name + "</td><td>" + classes[i].code + "</td><td>" + classes[i].professor.name + "</td></tr>";
                         $('tbody').append(html);
                     }
                     hideLoading();
                     $('.data-row').on('click', function(){
                         var user = JSON.parse(Cookies.get(cookieName));
-                        window.location = siteUrl + "classes/class?userId=" + user.id + "&classId=" + $(this).data('id');
+                        window.location = siteUrl + "classes/class?userId=" + user._id + "&classId=" + $(this).data('id');
                     });
                 },
                 error : function() {
@@ -534,6 +549,7 @@ var Navigation = function() {
             });
         },
         InitInventory: function() {
+            handleLogout();
             showLoading();
             $.ajax({
                 type: "GET",
@@ -556,6 +572,7 @@ var Navigation = function() {
             });
         },
         InitClassStudent: function() {
+            handleLogout();
             showLoading();
             $('.modal').modal();
             var url = new URL(window.location.href);
@@ -581,7 +598,7 @@ var Navigation = function() {
                 type: "GET",
                 url: siteUrl + "classes/assignments",
                 dataType: "json",
-                data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName)).id}),
+                data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName))._id}),
                 contentType: "application/json; charset=utf-8",
                 success: function(assignments){
                     for(var i = 0, len = assignments.length; i < len; i++) {
@@ -608,7 +625,7 @@ var Navigation = function() {
                 type: "GET",
                 url: siteUrl + "classes/whatHasTaken",
                 dataType: "json",
-                data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName)).id}),
+                data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName))._id}),
                 contentType: "application/json; charset=utf-8",
                 success: function(assignments){
                     for(var i = 0, len = assignments.length; i < len; i++) {
@@ -624,6 +641,7 @@ var Navigation = function() {
             });
         },
         InitClassProfessor: function() {
+            handleLogout();
             var url = new URL(window.location.href);
             var id = url.searchParams.get("classId");
             $('.datepicker').pickadate();
@@ -710,7 +728,7 @@ var Navigation = function() {
                         type: "GET",
                         url: siteUrl + "classes/assignments",
                         dataType: "json",
-                        data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName)).id}),
+                        data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName))._id}),
                         contentType: "application/json; charset=utf-8",
                         success: function(assignments){
                             for(var i = 0, len = assignments.length; i < len; i++) {
@@ -720,7 +738,7 @@ var Navigation = function() {
                             $('.view-taken').on('click', function(e){
                                 e.preventDefault();
                                 var assignmentId = $(this).data('id');
-                                var userId = JSON.parse(Cookies.get(cookieName)).id;
+                                var userId = JSON.parse(Cookies.get(cookieName))._id;
                                 showLoading();
                                 $.ajax({
                                         type: "GET",
@@ -749,7 +767,7 @@ var Navigation = function() {
                                     type: "POST",
                                     url: siteUrl + "classes/deleteAssignment",
                                     dataType: "json",
-                                    data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName)).id}),
+                                    data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName))._id}),
                                     contentType: "application/json; charset=utf-8",
                                     success: function(){
                                         showSuccessPopup('Assignment deleted!');
@@ -776,6 +794,7 @@ var Navigation = function() {
             });
         },
         InitStartAssignment: function() {
+            handleLogout();
             $('.modal').modal();
             showLoading();
             var url = new URL(window.location.href);
