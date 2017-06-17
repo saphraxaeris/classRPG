@@ -12,21 +12,22 @@
 * Send: { username: username, name: name, email: email, studentId: studentId, password: password, student: true }
 * Recieve Ok: user object without password
 * Recieve error: string message with error to show to user
+`Register Done  but error responds with Object not message`
 
 ### Login Post:
 * Recieve Ok: user object without password
-
+`Login Done`
 ### GET: /user/profile
 * Return page
-
+`Done`
 ### POST: /user/profile
 * Send: { password: password }
 * Recieve Ok: [nothing extra needed]
 * Recieve error: [nothing extra needed]
-
+`Done but need username sent as well`
 ### GET: /user/inventory
 * Return page
-
+`Done`
 ### GET: /user/getInventory
 * Send: User
 * Recieve Ok: Item[] of items in that user's inventory

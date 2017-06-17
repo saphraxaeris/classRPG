@@ -2,7 +2,25 @@ users
     _id
     name
     username
+    studentId
     email
     password
+    isStudent
+    office
+    gold
+    items[]
     (key)
-
+class
+    _id
+    name
+    professor_id professor
+    department
+    code
+    officeHours
+items
+    _id
+    class_id
+    className
+    name
+    effect
+    sprite

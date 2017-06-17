@@ -21,7 +21,8 @@ exports.login = function(req,res){
         console.log(user);
         users.update({_id:user._id},user,function(err, results) {
             if (err) {
-                res.send({'error':'An error has occurred - ' + err});
+                res.status(400);
+                res.send('An error has occurred - ' + err);
              } else {
                 delete(user.password);
                 res.send(user);
@@ -38,16 +39,17 @@ exports.getRegister = function(req,res){
 exports.register = function (req,res){
 var users = db.collection('users');
 users.findOne({username:req.body.username}).then(function(user) {
-    user.key = shortid.generate();
-    users.update({_id:user._id},user,function(err, results) {
-        if (err) {
-            res.send({'error':'An error has occurred - ' + err});
-            } else {
-            delete(user.password);
-            res.send(user);
-        }
-    });
-    });
+    if(user){
+        res.status(400);
+        res.send('An error has occurred - User Exists');
+    }
+    else{
+        users.insert(req.body,function(err,data){
+           delete(req.body.password);
+           res.send(req.body);
+        });
+    }    
+});
 };
 
 /* Profile */
@@ -56,7 +58,24 @@ exports.getProfile = function(req,res){
 };
 
 exports.profile = function(req,res){
-    res.send(true);
+    var users = db.collection('users');
+    users.findOne({username:req.body.username}).then(function(user) {
+        if(user){
+            user.password = req.body.password;
+            users.update({_id:user._id},user,function(err, results) {
+                if (err) {
+                    res.status(400);
+                    res.send('An error has occurred - ' + err);
+                } else {
+                    res.send(200);
+                }
+        });
+        }
+        else{
+            res.status(400);
+            res.send('An error has occurred - ');
+        }    
+    });
 };
 
 /* Inventory */
@@ -65,5 +84,23 @@ exports.getInventory = function(req,res){
 };
 
 exports.inventory = function(req,res){
-    res.send([{sprite: 'yellow-potion.png', id: '1', classId:'1', className:'CIIC5995', name:'Item 1', effect:'Testing'}, {sprite: 'scroll.png', id: '2', classId:'2', className:'ICOM5995', name:'Item 2' ,effect:'Testing 2'}]);
+    var users = db.collection('users');
+    users.findOne({username:req.body.username}).then(function(user) {
+        if(user){
+            itemList = []
+            var items = db.collection('items');
+            for(var i in user.items){
+                items.findOne({_id:i._id}).then(function(item){
+                    if(item){itemList.push(item);}
+                });
+            }
+            res.send(itemList);
+
+        }
+        else{
+            res.status(400);
+            res.send('An error has occurred - User does not exist');
+        }
+    });
+    
 };
