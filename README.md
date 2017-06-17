@@ -82,27 +82,27 @@ Recieve error: [nothing extra needed]
 * * questions = [{description: "", type: "", fillAnswer: "", correct_choice: "", choice1: "", choice2: "", choice3: "", choice4: ""}, ...]
 * Recieve Ok: [nothing extra needed]
 * Recieve error: [nothing extra needed]
-
+`Done`
 ### GET: classes/assignments
 * Send: { classId: classId, userId: userId } 
 * Recieve Ok: [{ assignmentId: assignmentId, classId: classId, name: "", description: "", startDate: "". endDate: "", hasTaken: true/false questions: questions}, ...] //only professors should be able to recieve questions of assignments, students still recieve everything else. hasTaken should be true if student has completed assignment
 * Recieve error: [nothing extra needed]
-
+`Done`
 ### GET: classes/whoHasTaken
 * Send: { classId: classId, assignmentId: assignmentId, userId: userId }
 * Recieve Ok: [{ userId: userId, name: "", studentId: "", grade: "", itemEffect: "" }, ...] //Only if userId sent belongs to professor that owns class with classId sent
 * Recieve error: [nothing extra needed]
-
+`Done`
 ### GET: classes/whatHasTaken
 * Send: { classId: classId, userId: userId }
 * Recieve Ok: [{ assignmentName: "", grade: "", itemEffect: "" }, ...] //List of assignments of classId user has taken
 * Recieve error: [nothing extra needed]
-
+`Done`
 ### POST: classes/deleteAssignment
 * Send: { classId: classId, assignmentId: assignmentId, userId: userId }
 * Recieve ok: [nothing extra needed]
 * Recieve error: [nothing extra needed]
-
+`Done`
 ## Objects:
 * User: { [something] id, string username, string name string email, string studentId, string password, bool student, string office, int gold }
 * Class: { [something] id, string name, User professor, string department, string code, string officeHours }

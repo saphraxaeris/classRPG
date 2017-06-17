@@ -223,30 +223,117 @@ exports.assignment = function(req, res) {
     res.sendFile('assignment.html',{root:"./view/classes"});
 };
 
+exports.addAssignment = function(req, res){
+    var assignments = db.collection('assignments');
+    assignments.insert(req.body,function(err,result){
+        if(err){
+            res.status(400);
+            res.send('Error - Could not insert '+ err);
+        }
+    });
+
+};
+
 exports.assignments = function(req, res){
-    var data = [{ assignmentId: 0, classId: 0, name: "Test Assignment", description: "Test description", startDate: "28 June, 2017", endDate: "29 June, 2017", hasTaken: true}, { assignmentId: 1, classId: 1, name: "Test Assignment 2", description: "Test description 2", startDate: "28 June, 2017", endDate: "29 June, 2017", hasTaken: false}]
-    res.send(data);
+    var users = db.collection('users');
+    var assignments = db.collection('assignment');
+    var answers = db.collection('answers');
+    users.findOne({_id:new BSON.ObjectId(req.query.userId)}).then(function(user){
+        if(user){
+            assignments.find({class_id:new BSON.ObjectId(req.query.classId)}).then(function(assignment){
+                    if(assignment){
+                        if(user.student){
+                            for(var i in assignment){
+                                answers.findOne({assigment_id:assignment._id,user_id:user._id}).then(function(answer){
+                                    if(answer){
+                                        i.hasTaken = true;
+                                    }
+                                });
+                            }
+                            delete(i.questions);
+                        }
+                        res.send(assignment);
+                    }
+                    else{
+                        res.status(400);
+                        res.send('Error - assignment was not found');
+                    }
+                });
+        }
+        else{
+            res.status(400);
+            res.send('Error - user was not found');
+        }
+    });
 };
 
 exports.whoHasTaken = function(req, res) {
-    var assignments = db.collection('assignments');
-    assignments.findOne({_id:new BSON.ObjectId(req.query.assignmentId)}).then(function(assignment){
-        if(assignment){
-            if(assignment.professor_id == new BSON.ObjectId(req.body.userId)){
-                
-            }
+    var users = db.collection('users');
+    var answers = db.collection('answers');
+    users.findOne({_id:new BSON.ObjectId(req.query.user_id)}).then(function(user){
+        if(user && !user.student){
+            answers.find({class_id:new BSON.ObjectId(req.query.classId),assignment_id:new BSON.ObjectId(req.query.assignmentId)}).then(function(answer){
+                if(answer){
+                    for(var i in answer){
+                        users.findOne({_id:i.user_id}).then(function(student){
+                            if(student){
+                                i.name = student.name;
+                                istudentId = student.studentId;
+                            }
+                            else{
+                                res.status(400);
+                                res.send('Error - Student not found');
+                            }
+                        });
+                    }
+                    res.send(answer);
+                }
+                else{
+                    res.status(400);
+                    res.send('Error - Answers not found');
+                }
+            });
+        }
+        else{
+            res.status(401);
+            res.send('Error - User is not a professor');
         }
     });
-    
-    var data = [{ userId: "0", name: "Stephan Elias Remy", studentId: "802-12-2205", grade: "98%", itemEffect: "Test Item was used" }];
-    res.send(data);
 };
 
 exports.whatHasTaken = function(req, res) {
-    var data = [{ assignmentName: "Test", grade: "98%", itemEffect: "Test Item was used" }];
-    res.send(data);
+    var answers = db.collection('answers');
+    answers.find({class_id:new BSON.ObjectId(req.query.classId),user_id:new BSON.ObjectId(req.query.userId)}).then(function(answer){
+        if(answer){
+            var assignments = db.collection('assignments');
+            for(var i in answer){
+                assignments.findOne({_id:i.assignment_id}).then(function(assignment){
+                    if(assignment){
+                    i.assignmentName = assignment.name;
+                    }
+                    else{
+                        res.status(400);
+                        res.send('Error - could not find assignment');
+                    }
+                }); 
+            }
+            res.send(answer);
+        }
+        else{
+            res.status(400);
+            res.send('Error - answers not found');
+        }        
+    });
 };
 
 exports.deleteAssignment = function(req, res) {
-    res.send(true);
+    var asnwers = db.collection('answers');
+    answers.remove({user_id:new BSON.ObjectId(req.body.userId),assignment_id:new BSON.ObjectId(req.body.assignmentId)},function(err,result){
+        if(err){
+            res.status(400);
+            res.send('Error - could not remove');
+        }else{
+            res.send(200);
+        }
+    });
 };
