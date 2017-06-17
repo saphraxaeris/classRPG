@@ -1,4 +1,12 @@
-
+var path = require('path');
+var shortid = require('shortid');
+var BSON = require('bson');
+  user._id = new BSON.ObjectID(user._id).toString();
+db = {};
+exports.setVars = function(DB)
+{
+    db = DB;
+}
 
 /* Classes */
 exports.getClasses = function(req,res){
@@ -6,7 +14,25 @@ exports.getClasses = function(req,res){
 };
 
 exports.classes = function(req,res){
-    res.send([{id: '1', name:'Test class 1', department:'Department', code:'ICOM4998', professor: { name: 'Amir'}}, {id: '2', name:'Test class 2', department:'Department', code:'CIIC4998', professor: { name: 'Amir'}}]);
+   
+    var users = db.collection('users');
+
+    users.findOne({_id:req.body._id}).then(function(user){
+        if(user){
+            var classes = db.collection('classes');
+            classList = []
+            for(var i in user.classes){
+                classes.findOne({_id:i._id}).then(function(cl){
+                    if(cl){classList.push(cl);}
+                });
+            }
+            res.send(classList);
+        }
+        else{
+            res.status(400);
+            res.send("Error - user not found.");
+        }
+    });
 };
 
 /* Class */

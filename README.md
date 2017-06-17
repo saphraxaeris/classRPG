@@ -12,7 +12,7 @@
 * Send: { username: username, name: name, email: email, studentId: studentId, password: password, student: true }
 * Recieve Ok: user object without password
 * Recieve error: string message with error to show to user
-`Register Done  but error responds with Object not message`
+`Done`
 
 ### Login Post:
 * Recieve Ok: user object without password
@@ -32,15 +32,15 @@
 * Send: User
 * Recieve Ok: Item[] of items in that user's inventory
 * Recieve error: [nothing extra needed]
-
+`Done`
 ### GET: /classes/classes
 * Return page
-
+`Done`
 ### GET: /classes/getClasses
 * Send: User
 * Recieve Ok: If user == student Class[] of classes that student is in. If user != student Class[] of classes that professor teaches
 * Recieve error: string message with error to show to user
-
+`Done`
 ### GET: /classes/class?userId=[id]&classId=[id]
 * Return: If userId belongs to student classStudent.html, else classProfessor.html
 

@@ -9,6 +9,7 @@ users
     office
     gold
     items[]
+    classes[]
     (key)
 class
     _id
@@ -24,3 +25,7 @@ items
     name
     effect
     sprite
+assignments
+    _id
+    class_id
+    
