@@ -74,7 +74,7 @@ exports.classes = function(req,res){
 /* Class */
 exports.class = function(req,res){
     var users = db.collection('users');
-    users.findOne({_id:new BSON.ObjectID(req.query.userId).toString()}).then(function(user){
+    users.findOne({_id:new BSON.ObjectID(req.query.userId)}).then(function(user){
         if(user){
             if(user.student){
                 res.sendFile('classStudent.html',{root:"./view/classes"});
