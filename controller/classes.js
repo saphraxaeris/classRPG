@@ -29,14 +29,23 @@ exports.classes = function(req,res){
                // console.log(user.classes[i].class_id);
                classList.push(user.classes[i].class_id);
             }
-                classes.findOne({_id:'1'}).then(function(cl){
+                classes.find({_id:{$in:classList}}).toArray(function(err,cl){
                     if(cl){
                         console.log(cl);
                         console.log(classList);
-                        users.findOne({_id:cl.professor_id}).then(function(prof){
+                        profList = [];
+                        for(var j in cl){
+                            profList.push(cl[j].professor_id);
+                        }
+
+                        users.find({_id:{$in:profList}}).toArray(function(err,prof){
                             if(prof){
-                                cl.professor = prof;
-                                res.send([cl]);
+                                for(var k in prof){
+                                    for(var l in cl){
+                                        if(cl[l].professor_id == prof[k]._id){cl[l].professor = prof[k];}
+                                    }
+                                }
+                                res.send(cl);
                             }else{
                                 console.log('Nope');
                                 console.log(prof);
