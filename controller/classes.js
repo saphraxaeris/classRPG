@@ -189,7 +189,7 @@ exports.classInfoProfessor = function(req,res){
                 if(user){
                     delete(user.password);
                     cl.professor = user;
-                    console.log(cl);
+                    //console.log(cl);
                     var items = db.collection('items');
                     items.find({classId:new BSON.ObjectId(cl._id)}).toArray(function(err,item){
                         if(item){
@@ -316,6 +316,7 @@ exports.assignments = function(req, res){
                                 }
                             });
                         }else{
+                            //console.log(assignment);
                             res.send(assignment);
                         }
                        
@@ -336,23 +337,33 @@ exports.assignments = function(req, res){
 exports.whoHasTaken = function(req, res) {
     var users = db.collection('users');
     var answers = db.collection('answers');
-    users.findOne({_id:new BSON.ObjectId(req.query.user_id)}).then(function(user){
+    users.findOne({_id:new BSON.ObjectId(req.query.userId)}).then(function(user){
+        //console.log(user);
         if(user && !user.student){
-            answers.find({class_id:new BSON.ObjectId(req.query.classId),assignment_id:new BSON.ObjectId(req.query.assignmentId)}).toArray(function(err,answer){
+            answers.find({classId:new BSON.ObjectId(req.query.classId),assignmentId:new BSON.ObjectId(req.query.assignmentId)}).toArray(function(err,answer){
                 if(answer){
+                    studentList = [];
                     for(var i in answer){
-                        users.findOne({_id:i.user_id}).then(function(student){
-                            if(student){
-                                i.name = student.name;
-                                istudentId = student.studentId;
-                            }
-                            else{
-                                res.status(400);
-                                res.send('Error - Student not found');
-                            }
-                        });
+                        studentList.push(new BSON.ObjectId(answer[i].userId));
                     }
-                    res.send(answer);
+                    users.find({_id:{$in:studentList}}).toArray(function(err,student){
+                        if(student){
+                            for(var j in answer){
+                                for(var k in student){
+                                    if(new BSON.ObjectId(answer[j].userId).toString() == new BSON.ObjectId(student[k]._id).toString()){
+                                        answer[j].name = student[k].name;
+                                        answer[j].studentId = student[k].studentId;
+                                    }
+                                }
+                            }
+                            console.log(answer);
+                            res.send(answer);
+                        }
+                        else{
+                            res.status(400);
+                            res.send('Error - Student not found');
+                        }
+                    });
                 }
                 else{
                     res.status(400);

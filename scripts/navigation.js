@@ -739,8 +739,9 @@ var Navigation = function() {
                         data: {classId: id, userId: JSON.parse(Cookies.get(cookieName))._id},
                         contentType: "application/json; charset=utf-8",
                         success: function(assignments){
+                            console.log(assignments);
                             for(var i = 0, len = assignments.length; i < len; i++) {
-                                var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].description + "</td><td>" + assignments[i].startDate + "</td><td>" + assignments[i].endDate + "</td><td><button data-id='" + assignments[i].assignmentId + "' class='view-taken btn teal'>Grades</button> <button data-id='" + assignments[i].assignmentId + "' class='delete-assignment btn red'>Delete</button></td></tr>";
+                                var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].description + "</td><td>" + assignments[i].startDate + "</td><td>" + assignments[i].endDate + "</td><td><button data-id='" + assignments[i]._id + "' class='view-taken btn teal'>Grades</button> <button data-id='" + assignments[i]._id + "' class='delete-assignment btn red'>Delete</button></td></tr>";
                                 $('tbody.assignments-table').append(html);
                             }
                             $('.view-taken').on('click', function(e){
