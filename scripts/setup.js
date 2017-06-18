@@ -31,10 +31,10 @@ db.open(function(err, db) {
 
         db.createCollection('items');
         var items = db.collection('items');
-        items.insert({_id:new BSON.ObjectId('abcdefghijkl'),sprite: 'yellow-potion.png', classId:'1', className:'CIIC5995', name:'Item 1', effect:'Testing'},function(err,data){
+        items.insert({_id:new BSON.ObjectId('abcdefghijkl'),sprite: 'yellow-potion.png', classId:new BSON.ObjectId('abcdefghijkl'), className:'CIIC5995', name:'Item 1', effect:'Testing'},function(err,data){
            console.log("Done");
         });
-        items.insert({_id:new BSON.ObjectId('bcdefghijklm'),sprite: 'scroll.png', classId:'2', className:'ICOM5995', name:'Item 2' ,effect:'Testing 2'},function(err,data){
+        items.insert({_id:new BSON.ObjectId('bcdefghijklm'),sprite: 'scroll.png', classId:new BSON.ObjectId('abcdefghijkl'), className:'ICOM5995', name:'Item 2' ,effect:'Testing 2'},function(err,data){
            console.log("Done");
         });
         
