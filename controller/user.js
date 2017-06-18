@@ -93,11 +93,14 @@ exports.inventory = function(req,res){
             itemList = []
             var items = db.collection('items');
             for(var i in user.items){
-                items.findOne({_id:i._id}).then(function(item){
-                    if(item){itemList.push(item);}
-                });
+                itemList.push(user.items[i].item_id);
             }
-            res.send(itemList);
+            items.find({_id:{$in:itemList}}).toArray(function(err,result){
+               
+                user.items = result;
+                res.send(result);
+            });
+            
 
         }
         else{
