@@ -783,7 +783,7 @@ var Navigation = function() {
                                     type: "POST",
                                     url: siteUrl + "classes/deleteAssignment",
                                     dataType: "json",
-                                    data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName))._id}),
+                                    data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName))._id, assignmentId: $(this).data('id')}),
                                     contentType: "application/json; charset=utf-8",
                                     success: function(){
                                         showSuccessPopup('Assignment deleted!');
