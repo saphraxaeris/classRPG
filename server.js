@@ -76,6 +76,7 @@ app.get('/classes/classInfoStudent', classes.classInfoStudent);
 app.get('/classes/classInfoProfessor', classes.classInfoProfessor);
 app.post('/classes/update', classes.updateClassInfo);
 app.post('/classes/addItem', classes.addItem);
+app.post('/classes/addAssignment',classes.addAssignment);
 app.get('/classes/assignments', classes.assignments);
 app.get('/classes/assignment', classes.assignment);
 app.get('/classes/assignmentQuestions', classes.assignmentQuestions);

@@ -267,10 +267,16 @@ exports.assignment = function(req, res) {
 
 exports.addAssignment = function(req, res){
     var assignments = db.collection('assignments');
+    //
+    req.body.class_id = new BSON.ObjectId(req.body.classId);
     assignments.insert(req.body,function(err,result){
+        console.log(req.body);
+        //console.log(result);
         if(err){
             res.status(400);
-            res.send('Error - Could not insert '+ err);
+            res.send('Error');
+        }else{
+            res.send(true);
         }
     });
 
@@ -291,6 +297,7 @@ exports.assignments = function(req, res){
             //console.log(user);
             assignments.find({class_id:new BSON.ObjectId(req.query.classId)}).toArray(function(err,assignment){
                     if(assignment){
+                        //console.log(assignment);
                         if(user.student){
                             for(var i in assignment){
                                 delete(assignment[i].questions);
@@ -356,7 +363,7 @@ exports.whoHasTaken = function(req, res) {
                                     }
                                 }
                             }
-                            console.log(answer);
+                            //console.log(answer);
                             res.send(answer);
                         }
                         else{
@@ -390,10 +397,10 @@ exports.whatHasTaken = function(req, res) {
                // console.log(i);
                 assignmentList.push(new BSON.ObjectId(answer[i].assignmentId));
             }
-            console.log(assignmentList);
+            //console.log(assignmentList);
             assignments.find({_id:{$in:assignmentList}}).toArray(function(err,assignment){
                     if(assignment){
-                        console.log(assignment);
+                        //console.log(assignment);
                         for(var j in assignment){
                             for(var k in answer){
                                 if(new BSON.ObjectId(assignment[j]._id).toString()==new BSON.ObjectId(answer[k].assignmentId).toString())
@@ -419,7 +426,7 @@ exports.whatHasTaken = function(req, res) {
 
 exports.deleteAssignment = function(req, res) {
     var assignments = db.collection('assignments');
-    console.log(req.body);
+    //console.log(req.body);
     assignments.remove({_id:new BSON.ObjectId(req.body.assignmentId)},function(err,result){
         if(err){
             res.status(400);
