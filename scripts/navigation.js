@@ -482,10 +482,11 @@ var Navigation = function() {
             $('#email').attr('disabled', 'disabled');
             $('#student-id').attr('disabled', 'disabled');
 
-            $('.profile-btn').on('click', function(e){
+            $('#profile-btn').on('click', function(e){
                 e.preventDefault();
+                debugger;
                 showLoading();
-                var password = $('#password');
+                var password = $('#password').val();
                 if(password.length == 0) {
                     showFailedPopup("Password can't be empty.");
                     hideLoading();
@@ -502,7 +503,7 @@ var Navigation = function() {
                     hideLoading();
                     return;
                 }
-
+                debugger;
                 $.ajax({
                 type: "POST",
                 url: siteUrl + "user/profile",
@@ -552,23 +553,25 @@ var Navigation = function() {
         InitInventory: function() {
             handleLogout();
             showLoading();
+            var user = Cookies.get(cookieName);
+            debugger;
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: siteUrl + "user/getInventory",
                 dataType: "json",
-                data: Cookies.get(cookieName),
+                data: user,
                 contentType: "application/json; charset=utf-8",
                 success: function(inventory){
                     for(var i = 0, len = inventory.length; i < len; i++) {
                         var html = "<tr><td><img class='sprite' alt='sprite' src='../images/"+ inventory[i].sprite +"'></td><td>" + inventory[i].className + "</td><td>" + inventory[i].name + "</td><td>" + inventory[i].effect + "</td></tr>";
                         $('tbody').append(html);
                     }
-                    $('#coins').text(JSON.parse(Cookies.get(cookieName)).gold);
+                    $('#coins').text(JSON.parse(user).gold);
                     hideLoading();
                 },
-                error : function() {
+                error : function(data) {
                     hideLoading();
-                    showFailedPopup('Failed to get classes.');
+                    showFailedPopup('Failed to get inventory.');
                 }
             });
         },
