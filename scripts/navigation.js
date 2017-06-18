@@ -815,8 +815,8 @@ var Navigation = function() {
                 data: {classId: classId, assignmentId: assignmentId},
                 contentType: "application/json; charset=utf-8",
                 success: function(assignmentInfo){
-                    $('.assignment-name').text(assignmentInfo.assignmentName);
-                    $('.assignment-description').text(assignmentInfo.assignmentDescription);
+                    $('.assignment-name').text(assignmentInfo.name);
+                    $('.assignment-description').text(assignmentInfo.description);
                     handleQuestionsHtml(assignmentInfo.questions);
                     handleAssignmentTimer();
                     hideLoading();
