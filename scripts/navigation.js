@@ -662,14 +662,10 @@ var Navigation = function() {
             $('#add-item-btn').on('click', function(){
                 var name = $('#item-name').val();
                 var effect = $('#item-effect').val();
-                var sprite = $('#item-sprite').find(":selected").text();
-
+                var sprite = $('#item-sprite').find(":selected").text().replace(" ", "-") + ".png";
+                debugger;
                 if(name.length == 0) {
                     showFailedPopup("Name can't be empty.");
-                    return;
-                }
-                else if(!/^[A-Za-z\s]+$/.test(name)) {
-                    showFailedPopup("Name is not valid.");
                     return;
                 }
 
