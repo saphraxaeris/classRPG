@@ -554,7 +554,6 @@ var Navigation = function() {
             handleLogout();
             showLoading();
             var user = Cookies.get(cookieName);
-            debugger;
             $.ajax({
                 type: "POST",
                 url: siteUrl + "user/getInventory",
