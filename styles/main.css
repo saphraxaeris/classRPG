@@ -190,6 +190,15 @@ table.highlight > tbody > tr:hover {
     z-index: 100;
 }
 
+#use-item {
+    z-index: 100;
+    float: right;
+    display: block;
+    position: fixed;
+    margin-top: 80px;
+    right: 170px;
+}
+
 .overlay {
     /* Height & width depends on how you want to reveal the overlay (see JS below) */
     height: 100%;
