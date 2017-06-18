@@ -48,7 +48,7 @@ db.open(function(err, db) {
         assignments.insert({_id:new BSON.ObjectId('abcdefghijkl'),name:'Guess the Age',class_id:new BSON.ObjectId('abcdefghijkl'),
         description:'Guess their ages to get the full grade.',startDate: "2017-05-12", endDate: "2017-12-31",
         questions:[{description:"Stephan's Age?",type:'fill-blank',fillAnswer:'23'},
-        {description:"Jose's Age?",type:'mult-choice',correct_choice:'choice2',choice1:'22',choice2:'23',choice3:'25',choice4:'timeless'}]},function(err,data){console.log('Done')});
+        {description:"Jose's Age?",type:'mult-choice',correct_choice:'2',choice1:'22',choice2:'23',choice3:'25',choice4:'timeless'}]},function(err,data){console.log('Done')});
 
 
         db.createCollection('answers');

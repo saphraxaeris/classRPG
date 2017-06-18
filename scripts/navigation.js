@@ -610,7 +610,7 @@ var Navigation = function() {
                 contentType: "application/json; charset=utf-8",
                 success: function(assignments){
                     for(var i = 0, len = assignments.length; i < len; i++) {
-                        var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].description + "</td><td>" + assignments[i].startDate + "</td><td>" + assignments[i].endDate + "</td><td><button data-id='" + assignments[i].assignmentId + "' class='complete-assignment right btn teal'>Take assignment</button></td></tr>";
+                        var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].description + "</td><td>" + assignments[i].startDate + "</td><td>" + assignments[i].endDate + "</td><td><button data-id='" + assignments[i]._id + "' class='complete-assignment right btn teal'>Take assignment</button></td></tr>";
                         if(!assignments[i].hasTaken) {
                             $('tbody.assignments-not-taken-table').append(html);
                         }
@@ -812,7 +812,7 @@ var Navigation = function() {
                 type: "GET",
                 url: siteUrl + "classes/assignmentQuestions",
                 dataType: "json",
-                data: JSON.stringify({classId: classId, assignmentId: assignmentId}),
+                data: {classId: classId, assignmentId: assignmentId},
                 contentType: "application/json; charset=utf-8",
                 success: function(assignmentInfo){
                     $('.assignment-name').text(assignmentInfo.assignmentName);
