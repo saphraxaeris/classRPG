@@ -16,17 +16,44 @@ exports.getClasses = function(req,res){
 exports.classes = function(req,res){
    
     var users = db.collection('users');
-
-    users.findOne({_id:req.body._id}).then(function(user){
+    //console.log(req.body);
+    id = new BSON.ObjectId(req.body._id);
+    //console.log(id);
+    users.findOne({_id:id}).then(function(user){
         if(user){
+            //console.log(user);
             var classes = db.collection('classes');
             classList = []
             for(var i in user.classes){
-                classes.findOne({_id:i._id}).then(function(cl){
-                    if(cl){classList.push(cl);}
-                });
+               // console.log(user.classes);
+               // console.log(user.classes[i].class_id);
+               classList.push(user.classes[i].class_id);
             }
-            res.send(classList);
+                classes.findOne({_id:'1'}).then(function(cl){
+                    if(cl){
+                        console.log(cl);
+                        console.log(classList);
+                        users.findOne({_id:cl.professor_id}).then(function(prof){
+                            if(prof){
+                                cl.professor = prof;
+                                res.send([cl]);
+                            }else{
+                                console.log('Nope');
+                                console.log(prof);
+                                console.log(classList);
+                                res.status(400);
+                                res.send('error');
+                             }
+                        });                        
+                    }
+                    else{
+                        console.log('Nope');
+                        console.log(cl);
+                        console.log(classList);
+                        res.status(400);
+                        res.send('error');
+                    }
+                });
         }
         else{
             res.status(400);
@@ -76,11 +103,6 @@ exports.assignmentQuestions = function(req, res) {
     });
     
 };
-
-function getGrade(attempt){
-    
-
-}
 
 exports.submitAssignment = function(req, res) {
     var assignments = db.collection('assignments');

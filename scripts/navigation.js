@@ -526,12 +526,13 @@ var Navigation = function() {
             handleLogout();
             showLoading();
             $.ajax({
-                type: "GET",
+                type: "POST",
                 url: siteUrl + "classes/getClasses",
                 dataType: "json",
                 data: Cookies.get(cookieName),
                 contentType: "application/json; charset=utf-8",
                 success: function(classes){
+                    console.log(classes);
                     for(var i = 0, len = classes.length; i < len; i++) {
                         var html = "<tr class='data-row' data-id='" + classes[i]._id +"'><td>" + classes[i].name + "</td><td>" + classes[i].code + "</td><td>" + classes[i].professor.name + "</td></tr>";
                         $('tbody').append(html);

@@ -69,7 +69,7 @@ app.post('/user/profile', user.profile);
 app.get('/user/getInventory',user.inventory);
 app.get('/user/inventory', user.getInventory);
 
-app.get('/classes/getClasses',classes.classes);
+app.post('/classes/getClasses',classes.classes);
 app.get('/classes/classes', classes.getClasses);
 app.get('/classes/class', classes.class);
 app.get('/classes/classInfoStudent', classes.classInfoStudent);

@@ -15,17 +15,17 @@ db.open(function(err, db) {
        var users = db.collection('users');
        users.insert({name:"Jose Garcia",username:"jose",password:"J123!",email:"jose.garcia12@upr.edu",
                     studentId: "802122645",student: true,gold:1000,
-                items:[{_id:'1'},{_id:'2'}],
-             classes:[{_id:'1'}] },function(err,data){
+                items:[{item_id:'1'},{item_id:'2'}],
+             classes:[{class_id:'1'}] },function(err,data){
            console.log("Done");
         });
         users.insert({username:"stephan",name:"Stephan",email:"stephan.elias@upr.edu",studentId: "802122645",
-        password: "J123!",student: true,gold:2000, classes:[{_id:'1'}] },function(err,data){
+        password: "J123!",student: true,gold:2000, classes:[{class_id:'1'}] },function(err,data){
            console.log("Done");
         });
         users.insert({_id:'3',name:"Amir Chinaei",username:"amir",password:"J123!",email:"ahchinaei@upr.edu",office:"OF-310",
                     student: false,
-                classes:[{_id:'1'}] },function(err,data){
+                classes:[{class_id:'1'}] },function(err,data){
            console.log("Done");
         });
 
