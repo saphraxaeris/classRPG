@@ -65,12 +65,7 @@ exports.profiler = function(req,res){
         if(user){
             user.password = req.body.password;
             users.update({username:req.body.username},user,function(err, results) {
-                if (err) {
-                    res.status(400);
-                    res.send('An error has occurred - ' + err);
-                } else {
-                    res.send(200);
-                }
+                res.send(true);
         });
         }
         else{
@@ -87,7 +82,7 @@ exports.getInventory = function(req,res){
 
 exports.inventory = function(req,res){
     var users = db.collection('users');
-    console.log(req.body);
+    //console.log(req.body);
     users.findOne({username:req.body.username}).then(function(user) {
         if(user){
             itemList = []
