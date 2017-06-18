@@ -60,6 +60,10 @@
     30:00
 </section>
 
+<section id="use-item">
+  <button data-target="use-item-model" class="btn">Use Item</button>
+</section>
+
 
 <div class="container">
 
@@ -81,6 +85,20 @@
         </div>
 	</div>
 </div>
+
+<!-- Use Item Modal -->
+  <div id="use-item-model" class="modal">
+    <div class="modal-content">
+      <h4>Pick item to use.</h4>
+      <p>
+        <input name="group1" type="radio" data-pos="-1" id="no-item" checked/>
+        <label for="no-item">No Item</label>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-action modal-close waves-effect waves-green btn teal">Close</a>
+    </div>
+  </div>
 
 <!-- Submit Assignment Modal -->
   <div id="submit-assignment" class="modal">

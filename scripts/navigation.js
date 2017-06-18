@@ -360,7 +360,7 @@ var Navigation = function() {
         }
     };
 
-    var submitAssignment = function() {
+    var submitAssignment = function(items) {
         showLoading();
         var answers = [];
         $.each($('#assignment-questions').children(), function(){
@@ -396,11 +396,22 @@ var Navigation = function() {
         var assignmentId = url.searchParams.get("assignmentId");
         var userId = JSON.parse(Cookies.get(cookieName))._id;
         
+        if(items) {
+            var selectedItem = {};
+            var itemRadioBtns = $('#use-item-model').find('.modal-content').find('input[type=radio]');
+            for(var i = 0; i < itemRadioBtns.length; i++) {
+                if(itemRadioBtns[i].is(':checked') && itemRadioBtns[i].data("pos") != "-1") {
+                    selectedItem = items[i];
+                }
+                break;
+            }
+        }
+
         $.ajax({
             type: "POST",
             url: siteUrl + "classes/submitAssignment",
             dataType: "json",
-            data: JSON.stringify({classId: classId, assignmentId: assignmentId, userId: userId, answers: answers}),
+            data: JSON.stringify({classId: classId, assignmentId: assignmentId, userId: userId, answers: answers, itemUsed: selectedItem}),
             contentType: "application/json; charset=utf-8",
             success: function(){
                 showSuccessPopup('Assignment submitted!');
@@ -813,6 +824,7 @@ var Navigation = function() {
             handleLogout();
             $('.modal').modal();
             showLoading();
+            var items = [];
             var url = new URL(window.location.href);
             var classId = url.searchParams.get("classId");
             var assignmentId = url.searchParams.get("assignmentId");
@@ -823,6 +835,26 @@ var Navigation = function() {
                 data: {classId: classId, assignmentId: assignmentId},
                 contentType: "application/json; charset=utf-8",
                 success: function(assignmentInfo){
+                    var user = Cookies.get(cookieName);
+                    $.ajax({
+                        type: "POST",
+                        url: siteUrl + "user/getInventory",
+                        dataType: "json",
+                        data: user,
+                        contentType: "application/json; charset=utf-8",
+                        success: function(inventory){
+                            for(var i = 0, len = inventory.length; i < len; i++) {
+                                if(inventory[i].classId === classId) {
+                                    var html = "<p><input name='group1' type='radio' data-pos='" + i +"' id='item-" + i + "'/><label for='item-" + i + "'><img class='' alt='sprite' src='../images/" +inventory[i].sprite + "'> " + inventory[i].name + " : " + inventory[i].effect + "</label></p>";
+                                    $('#use-item-model').find('.modal-content').append(html);
+                                }
+                            }
+                            items = inventory;
+                        },
+                        error : function(data) {
+                            showFailedPopup('Failed to get inventory.');
+                        }
+                    });
                     $('.assignment-name').text(assignmentInfo.name);
                     $('.assignment-description').text(assignmentInfo.description);
                     handleQuestionsHtml(assignmentInfo.questions);
@@ -836,7 +868,7 @@ var Navigation = function() {
             });
             handleAssignmentTimer();
             $('#submit-btn').on('click', function(){
-                submitAssignment();
+                submitAssignment(items);
             });
         }
     }
