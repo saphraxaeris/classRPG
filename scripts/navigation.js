@@ -85,6 +85,11 @@ var Navigation = function() {
             Cookies.remove(cookieName);
             setTimeout(function(){ window.location.replace(siteUrl); }, 1500);
         });
+        $('.logout-btn').on('click', function(){
+            showLoading();
+            Cookies.remove(cookieName);
+            setTimeout(function(){ window.location.replace(siteUrl); }, 1500);
+        });
     };
 
     var handleRegister = function(){
@@ -166,7 +171,7 @@ var Navigation = function() {
     var replaceLoginStuff = function() {
         //Remove login/register buttons
         var html = "<li><a href='/user/profile'>"+ JSON.parse(Cookies.get(cookieName)).name +"</a></li>";
-        html += "<li id='logout-btn'><button class='btn-flat'>Logout</button></li>";
+        html += "<li id='logout-btn'><button class='logout-btn btn-flat'>Logout</button></li>";
         $('.user-info').html(html);
     };
 
