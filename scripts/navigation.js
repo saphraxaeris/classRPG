@@ -85,6 +85,11 @@ var Navigation = function() {
             Cookies.remove(cookieName);
             setTimeout(function(){ window.location.replace(siteUrl); }, 1500);
         });
+        $('.logout-btn').on('click', function(){
+            showLoading();
+            Cookies.remove(cookieName);
+            setTimeout(function(){ window.location.replace(siteUrl); }, 1500);
+        });
     };
 
     var handleRegister = function(){
@@ -166,7 +171,7 @@ var Navigation = function() {
     var replaceLoginStuff = function() {
         //Remove login/register buttons
         var html = "<li><a href='/user/profile'>"+ JSON.parse(Cookies.get(cookieName)).name +"</a></li>";
-        html += "<li id='logout-btn'><button class='btn-flat'>Logout</button></li>";
+        html += "<li id='logout-btn'><button class='logout-btn btn-flat'>Logout</button></li>";
         $('.user-info').html(html);
     };
 
@@ -584,7 +589,7 @@ var Navigation = function() {
                 type: "GET",
                 url: siteUrl + "classes/classInfoStudent",
                 dataType: "json",
-                data: JSON.stringify({classId: id}),
+                data: {classId: id},
                 contentType: "application/json; charset=utf-8",
                 success: function(classInfo){
                     $('.class-name').text(classInfo.name);
@@ -601,7 +606,7 @@ var Navigation = function() {
                 type: "GET",
                 url: siteUrl + "classes/assignments",
                 dataType: "json",
-                data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName))._id}),
+                data: {classId: id, userId: JSON.parse(Cookies.get(cookieName))._id},
                 contentType: "application/json; charset=utf-8",
                 success: function(assignments){
                     for(var i = 0, len = assignments.length; i < len; i++) {
@@ -628,7 +633,7 @@ var Navigation = function() {
                 type: "GET",
                 url: siteUrl + "classes/whatHasTaken",
                 dataType: "json",
-                data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName))._id}),
+                data: {classId: id, userId: JSON.parse(Cookies.get(cookieName))._id},
                 contentType: "application/json; charset=utf-8",
                 success: function(assignments){
                     for(var i = 0, len = assignments.length; i < len; i++) {
@@ -718,7 +723,7 @@ var Navigation = function() {
                 type: "GET",
                 url: siteUrl + "classes/classInfoProfessor",
                 dataType: "json",
-                data: JSON.stringify({classId: id}),
+                data: {classId: id},
                 contentType: "application/json; charset=utf-8",
                 success: function(classInfo){
                     $('#office-hours').val(classInfo.classInfo.officeHours);
@@ -731,7 +736,7 @@ var Navigation = function() {
                         type: "GET",
                         url: siteUrl + "classes/assignments",
                         dataType: "json",
-                        data: JSON.stringify({classId: id, userId: JSON.parse(Cookies.get(cookieName))._id}),
+                        data: {classId: id, userId: JSON.parse(Cookies.get(cookieName))._id},
                         contentType: "application/json; charset=utf-8",
                         success: function(assignments){
                             for(var i = 0, len = assignments.length; i < len; i++) {
@@ -747,7 +752,7 @@ var Navigation = function() {
                                         type: "GET",
                                         url: siteUrl + "classes/whoHasTaken",
                                         dataType: "json",
-                                        data: JSON.stringify({classId: id, userId: userId, assignmentId: assignmentId}),
+                                        data: {classId: id, userId: userId, assignmentId: assignmentId},
                                         contentType: "application/json; charset=utf-8",
                                         success: function(assignments){
                                             $('tbody.students-table').html('');
