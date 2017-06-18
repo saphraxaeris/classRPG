@@ -226,7 +226,7 @@ exports.updateClassInfo = function(req,res){
                     res.send("Error Updating "+err);
                 }
                 else{
-                    res.send(200);
+                    res.send(true);
                 }
             });
         }
@@ -242,14 +242,15 @@ exports.addItem = function(req,res){
     var classes = db.collection('classes');
     classes.findOne({_id: new BSON.ObjectId(req.body.classId)}).then(function(cl){
         if(cl){
-            req.body.className = cl.name; 
+            req.body.className = cl.name;
+            req.body.classId = new BSON.ObjectId(req.body.classId); 
             items.insert(req.body,function(err,result){
                 if(err){
                     res.status(400);
                     res.send('Error - couldn\'t insert item');
                 }
                 else{
-                    res.send(200);
+                    res.send(true);
                 }
             });
         }
