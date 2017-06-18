@@ -64,9 +64,9 @@ app.get('/user/register',user.getRegister);
 app.post('/user/register',user.register);
 
 app.get('/user/profile',user.getProfile);
-app.post('/user/profile', user.profile);
+app.post('/user/profile', user.profiler);
 
-app.get('/user/getInventory',user.inventory);
+app.post('/user/getInventory',user.inventory);
 app.get('/user/inventory', user.getInventory);
 
 app.post('/classes/getClasses',classes.classes);

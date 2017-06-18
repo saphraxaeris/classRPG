@@ -57,9 +57,11 @@ exports.getProfile = function(req,res){
     res.sendFile('profile.html',{root:"./view/user"});
 };
 
-exports.profile = function(req,res){
+exports.profiler = function(req,res){
     var users = db.collection('users');
+    console.log('Here');
     users.findOne({username:req.body.username}).then(function(user) {
+        console.log(user);
         if(user){
             user.password = req.body.password;
             users.update({username:req.body.username},user,function(err, results) {
@@ -85,6 +87,7 @@ exports.getInventory = function(req,res){
 
 exports.inventory = function(req,res){
     var users = db.collection('users');
+    console.log(req.body);
     users.findOne({username:req.body.username}).then(function(user) {
         if(user){
             itemList = []

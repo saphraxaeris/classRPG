@@ -31,8 +31,8 @@ exports.classes = function(req,res){
             }
                 classes.find({_id:{$in:classList}}).toArray(function(err,cl){
                     if(cl){
-                        console.log(cl);
-                        console.log(classList);
+                        //console.log(cl);
+                        //console.log(classList);
                         profList = [];
                         for(var j in cl){
                             profList.push(cl[j].professor_id);
@@ -47,18 +47,18 @@ exports.classes = function(req,res){
                                 }
                                 res.send(cl);
                             }else{
-                                console.log('Nope');
-                                console.log(prof);
-                                console.log(classList);
+                                //console.log('Nope');
+                                //console.log(prof);
+                                //console.log(classList);
                                 res.status(400);
                                 res.send('error');
                              }
                         });                        
                     }
                     else{
-                        console.log('Nope');
-                        console.log(cl);
-                        console.log(classList);
+                        //console.log('Nope');
+                        //console.log(cl);
+                        //console.log(classList);
                         res.status(400);
                         res.send('error');
                     }
