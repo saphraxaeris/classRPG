@@ -268,24 +268,33 @@ exports.addAssignment = function(req, res){
     });
 
 };
+// exports.assignments = function(req,res){
+//     res.send([{assignmentId:new BSON.ObjectId('abcdefghijkl'),name:'Guess the Age',classId:new BSON.ObjectId('abcdefghijkl'),
+//         description:'Guess their ages to get the full grade.',startDate: "2017-05-12", endDate: "2017-12-31",
+//         questions:[{description:"Stephan's Age?",type:'fill-blank',fillAnswer:'23'},
+//         {description:"Jose's Age?",type:'mult-choice',correct_choice:'choice2',choice1:'22',choice2:'23',choice3:'25',choice4:'timeless'}]}])
 
+// };
 exports.assignments = function(req, res){
     var users = db.collection('users');
-    var assignments = db.collection('assignment');
+    var assignments = db.collection('assignments');
     var answers = db.collection('answers');
     users.findOne({_id:new BSON.ObjectId(req.query.userId)}).then(function(user){
         if(user){
-            assignments.find({class_id:new BSON.ObjectId(req.query.classId)},function(err,assignment){
+            console.log(user);
+            assignments.find({class_id:new BSON.ObjectId(req.query.classId)}).toArray(function(err,assignment){
                     if(assignment){
                         if(user.student){
                             for(var i in assignment){
                                 delete(assignment[i].questions);
                             }
+                            
                             assignmentList = [];
                             for(var i in assignment){
                                 assignmentList.push(assignment[i]._id);
                             }
-                            answers.find({user_id:new BSON.ObjectId(user._id),assignment_id:{$in:assignmentList}},function(err,answer){
+                            console.log(assignmentList);
+                            answers.find({user_id:new BSON.ObjectId(user._id),assignment_id:{$in:assignmentList}}).toArray(function(err,answer){
                                 if(answer){
                                     for(var j in answer){
                                         for(var k in assignment){
@@ -320,7 +329,7 @@ exports.whoHasTaken = function(req, res) {
     var answers = db.collection('answers');
     users.findOne({_id:new BSON.ObjectId(req.query.user_id)}).then(function(user){
         if(user && !user.student){
-            answers.find({class_id:new BSON.ObjectId(req.query.classId),assignment_id:new BSON.ObjectId(req.query.assignmentId)}).then(function(answer){
+            answers.find({class_id:new BSON.ObjectId(req.query.classId),assignment_id:new BSON.ObjectId(req.query.assignmentId)}).toArray(function(err,answer){
                 if(answer){
                     for(var i in answer){
                         users.findOne({_id:i.user_id}).then(function(student){
@@ -351,11 +360,13 @@ exports.whoHasTaken = function(req, res) {
 
 exports.whatHasTaken = function(req, res) {
     var answers = db.collection('answers');
-    answers.find({class_id:new BSON.ObjectId(req.query.classId),user_id:new BSON.ObjectId(req.query.userId)},function(err,answer){
+    //console.log(req.query);
+    answers.find({class_id:new BSON.ObjectId(req.query.classId),user_id:new BSON.ObjectId(req.query.userId)}).toArray(function(err,answer){
         if(answer){
             console.log(answer);
             var assignments = db.collection('assignments');
             assignmentList =[]
+            //console.log(answer);
             for(var i in answer){
                 console.log(i);
                 assignmentList.push(answer[i].assignment_id);
