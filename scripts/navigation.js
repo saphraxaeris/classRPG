@@ -610,7 +610,7 @@ var Navigation = function() {
                 contentType: "application/json; charset=utf-8",
                 success: function(assignments){
                     for(var i = 0, len = assignments.length; i < len; i++) {
-                        var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].description + "</td><td>" + assignments[i].startDate + "</td><td>" + assignments[i].endDate + "</td><td><button data-id='" + assignments[i]._id + "' class='complete-assignment right btn teal'>Take assignment</button></td></tr>";
+                        var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].description + "</td><td>" + assignments[i].startDate + "</td><td>" + assignments[i].endDate + "</td><td><button data-id='" + assignments[i]._id + "' class='complete-assignment right btn teal'>Complete</button></td></tr>";
                         if(!assignments[i].hasTaken) {
                             $('tbody.assignments-not-taken-table').append(html);
                         }
@@ -637,7 +637,11 @@ var Navigation = function() {
                 contentType: "application/json; charset=utf-8",
                 success: function(assignments){
                     for(var i = 0, len = assignments.length; i < len; i++) {
-                        var html = "<tr><td>" + assignments[i].assignmentName + "</td><td>" + assignments[i].grade + "</td><td>" + assignments[i].itemEffect + "</td></tr>";
+                        var item = "[N/A]";
+                        if(assignments[i].itemEffect != undefined) {
+                            item = assignments[i].itemEffect;
+                        }
+                        var html = "<tr><td>" + assignments[i].assignmentName + "</td><td>" + assignments[i].grade + "</td><td>" + item + "</td></tr>";
                         $('tbody.assignments-taken-table').append(html);
                     }
                     hideLoading();
@@ -658,14 +662,10 @@ var Navigation = function() {
             $('#add-item-btn').on('click', function(){
                 var name = $('#item-name').val();
                 var effect = $('#item-effect').val();
-                var sprite = $('#item-sprite').find(":selected").text();
-
+                var sprite = $('#item-sprite').find(":selected").text().replace(" ", "-") + ".png";
+                debugger;
                 if(name.length == 0) {
                     showFailedPopup("Name can't be empty.");
-                    return;
-                }
-                else if(!/^[A-Za-z\s]+$/.test(name)) {
-                    showFailedPopup("Name is not valid.");
                     return;
                 }
 
@@ -758,7 +758,11 @@ var Navigation = function() {
                                         success: function(assignments){
                                             $('tbody.students-table').html('');
                                             for(var i = 0, len = assignments.length; i < len; i++) {
-                                                var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].studentId + "</td><td>" + assignments[i].grade + "</td><td>" + assignments[i].itemEffect + "</td></tr>";
+                                                var item = "[N/A]";
+                                                if(assignments[i].itemEffect != undefined) {
+                                                    item = assignments[i].itemEffect;
+                                                }
+                                                var html = "<tr><td>" + assignments[i].name + "</td><td>" + assignments[i].studentId + "</td><td>" + assignments[i].grade + "</td><td>" + item + "</td></tr>";
                                                 $('tbody.students-table').append(html);
                                             }
                                             hideLoading();
@@ -816,8 +820,8 @@ var Navigation = function() {
                 data: {classId: classId, assignmentId: assignmentId},
                 contentType: "application/json; charset=utf-8",
                 success: function(assignmentInfo){
-                    $('.assignment-name').text(assignmentInfo.assignmentName);
-                    $('.assignment-description').text(assignmentInfo.assignmentDescription);
+                    $('.assignment-name').text(assignmentInfo.name);
+                    $('.assignment-description').text(assignmentInfo.description);
                     handleQuestionsHtml(assignmentInfo.questions);
                     handleAssignmentTimer();
                     hideLoading();
