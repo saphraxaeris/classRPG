@@ -230,6 +230,7 @@ var Navigation = function() {
     var handleAssignmentAdd = function() {
         $('#add-assignment-btn').on('click', function(e){
             e.preventDefault();
+            debugger;
             var questions = [];
             var assignmentName = $('#assignment-name').val();
             var assignmentDescription = $('#assignment-description').val();
@@ -318,7 +319,7 @@ var Navigation = function() {
             if(questions.length == $('#assignment-questions').children().length) {
                 var url = new URL(window.location.href);
                 var id = url.searchParams.get("classId");
-                var assignment = { classId: id, questions: questions};
+                var assignment = { classId: id, name: assignmentName, description: assignmentDescription, questions: questions, startDate: startDate, endDate: endDate };
 
                 showLoading();
                 $.ajax({
@@ -328,10 +329,12 @@ var Navigation = function() {
                     data: JSON.stringify(assignment),
                     contentType: "application/json; charset=utf-8",
                     success: function(classInfo){
+                        debugger;
                         showSuccessPopup('Successfully added assignment.');
                         setTimeout(function(){ location.reload(); }, 1500);
                     },
-                    error : function() {
+                    error : function(error) {
+                        debugger;
                         hideLoading();
                         showFailedPopup('Failed to add assignment.');
                     }
@@ -770,7 +773,7 @@ var Navigation = function() {
                                         },
                                         error: function(){
                                             hideLoading();
-                                            showFailedPopup('Failed to get class assignments.');
+                                            showFailedPopup('Failed to get assignment grades.');
                                         }
                                     });
                             });
