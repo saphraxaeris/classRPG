@@ -275,19 +275,32 @@ exports.assignments = function(req, res){
     var answers = db.collection('answers');
     users.findOne({_id:new BSON.ObjectId(req.query.userId)}).then(function(user){
         if(user){
-            assignments.find({class_id:new BSON.ObjectId(req.query.classId)}).then(function(assignment){
+            assignments.find({class_id:new BSON.ObjectId(req.query.classId)},function(err,assignment){
                     if(assignment){
                         if(user.student){
                             for(var i in assignment){
-                                answers.findOne({assigment_id:assignment._id,user_id:user._id}).then(function(answer){
-                                    if(answer){
-                                        i.hasTaken = true;
-                                    }
-                                });
+                                delete(assignment[i].questions);
                             }
-                            delete(i.questions);
+                            assignmentList = [];
+                            for(var i in assignment){
+                                assignmentList.push(assignment[i]._id);
+                            }
+                            answers.find({user_id:new BSON.ObjectId(user._id),assignment_id:{$in:assignmentList}},function(err,answer){
+                                if(answer){
+                                    for(var j in answer){
+                                        for(var k in assignment){
+                                            if(new BSON.ObjectId(assignment[k]._id).toString()==new BSON.ObjectId(answer[j].assignment_id).toString()){
+                                                assignment[k].hasTaken = true;
+                                            }
+                                        }
+                                    }
+                                    res.send(assignment);
+                                }
+                            });
+                        }else{
+                            res.send(assignment);
                         }
-                        res.send(assignment);
+                       
                     }
                     else{
                         res.status(400);
@@ -338,21 +351,32 @@ exports.whoHasTaken = function(req, res) {
 
 exports.whatHasTaken = function(req, res) {
     var answers = db.collection('answers');
-    answers.find({class_id:new BSON.ObjectId(req.query.classId),user_id:new BSON.ObjectId(req.query.userId)}).then(function(answer){
+    answers.find({class_id:new BSON.ObjectId(req.query.classId),user_id:new BSON.ObjectId(req.query.userId)},function(err,answer){
         if(answer){
+            console.log(answer);
             var assignments = db.collection('assignments');
+            assignmentList =[]
             for(var i in answer){
-                assignments.findOne({_id:i.assignment_id}).then(function(assignment){
+                console.log(i);
+                assignmentList.push(answer[i].assignment_id);
+            }
+            assignments.find({_id:{$in:assignmentList}},function(err,assignment){
                     if(assignment){
-                    i.assignmentName = assignment.name;
+                        for(var j in assignment){
+                            for(var k in answer){
+                                if(new BSON.ObjectId(assignment[j]._id).toString()==new BSON.ObjectId(answer[k].assignment_id).toString())
+                                {
+                                    answer[k].assignmentName = assignment[i].name;
+                                }
+                            }
+                        }
+                        res.send(answer);
                     }
                     else{
                         res.status(400);
                         res.send('Error - could not find assignment');
                     }
                 }); 
-            }
-            res.send(answer);
         }
         else{
             res.status(400);

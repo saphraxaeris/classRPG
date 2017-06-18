@@ -52,6 +52,8 @@ db.open(function(err, db) {
 
 
         db.createCollection('answers');
+        var answers = db.collection('answers');
+
         
 
 
