@@ -189,10 +189,11 @@ exports.classInfoProfessor = function(req,res){
                 if(user){
                     delete(user.password);
                     cl.professor = user;
+                    console.log(cl);
                     var items = db.collection('items');
-                    items.find({class_id:cl._id}).then(function(items){
-                        if(items){
-                            res.send({classInfo:cl,items:items});
+                    items.find({classId:new BSON.ObjectId(cl._id)}).toArray(function(err,item){
+                        if(item){
+                            res.send({classInfo:cl,items:item});
                         }
                         else{
                             res.status(400);
