@@ -418,13 +418,14 @@ exports.whatHasTaken = function(req, res) {
 };
 
 exports.deleteAssignment = function(req, res) {
-    var asnwers = db.collection('answers');
-    answers.remove({user_id:new BSON.ObjectId(req.body.userId),assignment_id:new BSON.ObjectId(req.body.assignmentId)},function(err,result){
+    var assignments = db.collection('assignments');
+    console.log(req.body);
+    assignments.remove({_id:new BSON.ObjectId(req.body.assignmentId)},function(err,result){
         if(err){
             res.status(400);
             res.send('Error - could not remove');
         }else{
-            res.send(200);
+            res.send(true);
         }
     });
 };
