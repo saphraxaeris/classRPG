@@ -409,6 +409,7 @@ exports.whatHasTaken = function(req, res) {
                                 }
                             }
                         }
+                        //console.log(answer);
                         res.send(answer);
                     }
                     else{
