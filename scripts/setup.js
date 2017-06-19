@@ -55,7 +55,7 @@ db.open(function(err, db) {
         var answers = db.collection('answers');
 
         
-
+        db.close();
 
     }
 });

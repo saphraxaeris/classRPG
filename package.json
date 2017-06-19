@@ -4,8 +4,9 @@
   "description": "Class RPG project for WebDev class.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "node scripts/setup.js"
+    "start-setup": "node scripts/setup.js",
+    "start-server": "node server.js",
+    "start": "npm run start-setup & npm run start-server"
   },
   "repository": {
     "type": "git",
@@ -23,6 +24,7 @@
   "homepage": "https://github.com/saphraxaeris/classRPG#readme",
   "dependencies": {
     "body-parser": "^1.17.1",
+    "bson": "^1.0.4",
     "connect-ensure-login": "^0.1.1",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-beta.1",
