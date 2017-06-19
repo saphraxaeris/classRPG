@@ -396,17 +396,18 @@ var Navigation = function() {
         var assignmentId = url.searchParams.get("assignmentId");
         var userId = JSON.parse(Cookies.get(cookieName))._id;
         
-        if(items) {
-            var selectedItem = {};
-            var itemRadioBtns = $('#use-item-model').find('.modal-content').find('input[type=radio]');
-            for(var i = 0; i < itemRadioBtns.length; i++) {
-                if(itemRadioBtns[i].is(':checked') && itemRadioBtns[i].data("pos") != "-1") {
-                    selectedItem = items[i];
+        var selectedItem = {};
+        if(!$('#no-item').is(':checked')) {
+            var position = 0;
+            var radioButtons = $('#use-item-model').find('input[type=radio]');
+            for(var i = 0; i < radioButtons.length; i++) {
+                if(radioButtons[i].checked) {
+                    position = i-1;
                 }
-                break;
             }
+            selectedItem = items[position];
         }
-
+        debugger;
         $.ajax({
             type: "POST",
             url: siteUrl + "classes/submitAssignment",
